@@ -16,6 +16,48 @@
 		<spring-version>4.3.15.RELEASE</spring-version>
 		<spring-data-mongodb-version>1.10.11.RELEASE</spring-data-mongodb-version>
 	</properties>
+	<!-- License -->
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<!-- License end -->
+
+	<!-- Developers -->
+	<developers>
+		<developer>
+			<name>Aldwin Su</name>
+			<email>fangyansu@163.com</email>
+			<timezone>+8</timezone>
+		</developer>
+	</developers>
+	<!-- Developers end -->
+
+	<!-- scm -->
+	<scm>
+		<connection>scm:git:https://github.com/eagle6688/devutility.external.mongo.git</connection>
+		<developerConnection>scm:git:https://github.com/eagle6688/devutility.external.mongo.git</developerConnection>
+		<url>https://github.com/eagle6688/devutility.external.mongo</url>
+		<tag>v${project.version}</tag>
+	</scm>
+	<!-- scm end -->
+
+	<!-- distributionManagement -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<name>Maven Central Staging Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+	<!-- distributionManagement end -->
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -40,4 +82,69 @@
 		</dependency>
 		<!-- Test end -->
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>9</source>
+					<target>9</target>
+					<encoding>utf8</encoding>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
