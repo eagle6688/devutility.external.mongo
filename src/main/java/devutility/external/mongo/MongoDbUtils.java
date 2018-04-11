@@ -2,7 +2,6 @@ package devutility.external.mongo;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,12 +13,12 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,7 +28,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import com.mongodb.WriteResult;
+import com.mongodb.client.result.UpdateResult;
 
 import devutility.internal.dao.models.DbInstance;
 import devutility.internal.lang.models.EntityField;
@@ -39,9 +38,8 @@ public class MongoDbUtils {
 	 * Create MongoClient object
 	 * @param dbInstance: DbInstance object
 	 * @return MongoClient
-	 * @throws UnknownHostException
 	 */
-	public static MongoClient mongoClient(DbInstance dbInstance) throws UnknownHostException {
+	public static MongoClient mongoClient(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
 		}
@@ -79,14 +77,7 @@ public class MongoDbUtils {
 			return null;
 		}
 
-		MongoDbFactory mongoDbFactory = null;
-
-		try {
-			mongoDbFactory = mongoDbFactory(dbInstance);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
+		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
 		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
 		return new MongoTemplate(mongoDbFactory, mongoConverter);
 	}
@@ -108,9 +99,8 @@ public class MongoDbUtils {
 	 * Create ServerAddress object
 	 * @param dbInstance: Database instance
 	 * @return ServerAddress
-	 * @throws UnknownHostException
 	 */
-	private static ServerAddress createServerAddress(DbInstance dbInstance) throws UnknownHostException {
+	private static ServerAddress createServerAddress(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
 		}
@@ -122,9 +112,8 @@ public class MongoDbUtils {
 	 * Create MongoDbFactory object
 	 * @param dbInstance: Database instance
 	 * @return MongoDbFactory
-	 * @throws UnknownHostException
 	 */
-	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) throws UnknownHostException {
+	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
 		}
@@ -139,8 +128,12 @@ public class MongoDbUtils {
 	 * @return MongoConverter
 	 */
 	private static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
+		if (mongoDbFactory == null) {
+			return null;
+		}
+
 		DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDbFactory);
-		CustomConversions conversions = new CustomConversions(Collections.emptyList());
+		MongoCustomConversions conversions = new MongoCustomConversions(Collections.emptyList());
 
 		MongoMappingContext mappingContext = new MongoMappingContext();
 		mappingContext.setSimpleTypeHolder(conversions.getSimpleTypeHolder());
@@ -192,9 +185,9 @@ public class MongoDbUtils {
 	 * @param setField: Field need update
 	 * @param setValue: Field value need update
 	 * @param clazz: Collection entity class
-	 * @return WriteResult
+	 * @return UpdateResult
 	 */
-	public static WriteResult update(MongoOperations mongoOperations, String id, String setField, Object setValue, Class<?> clazz) {
+	public static UpdateResult update(MongoOperations mongoOperations, String id, String setField, Object setValue, Class<?> clazz) {
 		return update(mongoOperations, "_id", id, setField, setValue, clazz);
 	}
 
@@ -206,9 +199,9 @@ public class MongoDbUtils {
 	 * @param setField: Field need update
 	 * @param setValue: Field value need update
 	 * @param clazz: Collection entity class
-	 * @return WriteResult
+	 * @return UpdateResult
 	 */
-	public static WriteResult update(MongoOperations mongoOperations, String keyField, Object keyValue, String setField, Object setValue, Class<?> clazz) {
+	public static UpdateResult update(MongoOperations mongoOperations, String keyField, Object keyValue, String setField, Object setValue, Class<?> clazz) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where(keyField).is(keyValue));
 
