@@ -30,6 +30,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.result.UpdateResult;
 
+import devutility.internal.base.SingletonFactory;
+import devutility.internal.dao.DbInstanceHelper;
 import devutility.internal.dao.models.DbInstance;
 import devutility.internal.lang.models.EntityField;
 
@@ -80,6 +82,30 @@ public class MongoDbUtils {
 		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
 		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
 		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
+	 * Get or create a MongoTemplate instance.
+	 * @param propertiesFile: Properties file
+	 * @param prefix: Prefix of mongodb config in properties file.
+	 * @return MongoTemplate
+	 */
+	public static MongoTemplate mongoTemplate(String propertiesFile, String prefix) {
+		String key = String.format("%s.%s", prefix, MongoTemplate.class.getName());
+		MongoTemplate mongoTemplate = SingletonFactory.get(key, MongoTemplate.class);
+
+		if (mongoTemplate != null) {
+			return mongoTemplate;
+		}
+
+		synchronized (MongoDbUtils.class) {
+			if (mongoTemplate == null) {
+				DbInstance dbInstance = DbInstanceHelper.getInstance(propertiesFile, prefix);
+				mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
+			}
+		}
+
+		return mongoTemplate;
 	}
 
 	/**

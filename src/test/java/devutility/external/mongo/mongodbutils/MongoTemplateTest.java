@@ -1,20 +1,27 @@
 package devutility.external.mongo.mongodbutils;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.devutility.test.entity.mongo.Student;
-
-import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.MongoDbUtils;
+import devutility.internal.base.SingletonFactory;
+import devutility.internal.test.BaseTest;
 import devutility.internal.test.TestExecutor;
 
 public class MongoTemplateTest extends BaseTest {
 	@Override
 	public void run() {
-		List<Student> list = Student.list(1);
-		mongoOperations.save(list.get(0));
+		MongoTemplate mongoTemplate = MongoDbUtils.mongoTemplate("dbconfig.properties", "mongodb");
+
+		if (mongoTemplate == null) {
+			println("null");
+		}
+
+		println(String.format("The size of container %d", SingletonFactory.getContainer().size()));
 	}
 
 	public static void main(String[] args) {
-		TestExecutor.run(MongoTemplateTest.class);
+		TestExecutor.concurrentRun(100, MongoTemplateTest.class, (data) -> {
+			System.out.println(data);
+		});
 	}
 }
