@@ -1,6 +1,5 @@
 package devutility.external.mongo.bulkoperationshelper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import com.devutility.test.entity.mongo.Student;
@@ -19,7 +18,7 @@ public class SaveTest extends BaseTest {
 		try {
 			BulkWriteResult result = bulkOperationsHelper.save(list, Student.class);
 			System.out.println(result);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IllegalArgumentException | ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 

@@ -1,7 +1,6 @@
 package devutility.external.mongo;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +46,10 @@ public class BulkOperationsHelper {
 	 * @param entity: Entity object
 	 * @param entityFields: Entity fields
 	 * @return {@literal Pair<Query, Update>}
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Pair<Query, Update> toPair(T entity, List<EntityField> entityFields) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> Pair<Query, Update> toPair(T entity, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
 		Query query = new Query();
 		Update update = new Update();
 
@@ -88,11 +86,10 @@ public class BulkOperationsHelper {
 	 * @param list: Entities.
 	 * @param clazz: Entity class.
 	 * @return {@literal List<Pair<Query,Update>>}
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, Class<T> clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		List<Pair<Query, Update>> pairs = new ArrayList<>(list.size());
 		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
 
@@ -109,11 +106,10 @@ public class BulkOperationsHelper {
 	 * @param fields: Fields contains in query.
 	 * @param clazz: Entity class.
 	 * @return {@literal List<Pair<Query,Update>>}
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fields, Class<T> clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fields, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		List<Pair<Query, Update>> pairs = new ArrayList<>(list.size());
 		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
 
@@ -131,11 +127,10 @@ public class BulkOperationsHelper {
 	 * @param list: Entities.
 	 * @param clazz: Entity class.
 	 * @return BulkWriteResult
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException BulkWriteResult
+	 * @throws ReflectiveOperationException
 	 */
-	public <T> BulkWriteResult save(List<T> list, Class<T> clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> BulkWriteResult save(List<T> list, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
 		List<Pair<Query, Update>> pairs = toPairs(list, clazz);
 		bulkOperations.upsert(pairs);
@@ -148,11 +143,10 @@ public class BulkOperationsHelper {
 	 * @param fields: Fields can determine an unique entity.
 	 * @param clazz: Entity class.
 	 * @return BulkWriteResult
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public <T> BulkWriteResult save(List<T> list, List<String> fields, Class<T> clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public <T> BulkWriteResult save(List<T> list, List<String> fields, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
 		List<Pair<Query, Update>> pairs = toPairs(list, fields, clazz);
 		bulkOperations.upsert(pairs);

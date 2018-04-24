@@ -1,7 +1,6 @@
 package devutility.external.mongo;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -276,11 +275,10 @@ public class MongoDbUtils {
 	 * @param fields: Entity fields
 	 * @param entityFields: Entity EntityField list
 	 * @return Query
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Query entityToQuery(T entity, List<String> fields, List<EntityField> entityFields) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> Query entityToQuery(T entity, List<String> fields, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
 		Query query = new Query();
 
 		for (EntityField entityField : entityFields) {
@@ -312,11 +310,10 @@ public class MongoDbUtils {
 	 * @param entity: Entity object
 	 * @param entityFields: Entity EntityField list
 	 * @return Update
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
 		Update update = new Update();
 
 		for (EntityField entityField : entityFields) {
