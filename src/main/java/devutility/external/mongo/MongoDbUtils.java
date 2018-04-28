@@ -1,7 +1,6 @@
 package devutility.external.mongo;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -75,20 +74,14 @@ public class MongoDbUtils {
 	 * Create MongoTemplate object
 	 * @param dbInstance: DbInstance object
 	 * @return MongoTemplate
+	 * @throws UnknownHostException
 	 */
-	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
+	public static MongoTemplate mongoTemplate(DbInstance dbInstance) throws UnknownHostException {
 		if (dbInstance == null) {
 			return null;
 		}
 
-		MongoDbFactory mongoDbFactory = null;
-
-		try {
-			mongoDbFactory = mongoDbFactory(dbInstance);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
+		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
 		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
 		return new MongoTemplate(mongoDbFactory, mongoConverter);
 	}
@@ -110,7 +103,12 @@ public class MongoDbUtils {
 		synchronized (MongoDbUtils.class) {
 			if (mongoTemplate == null) {
 				DbInstance dbInstance = DbInstanceHelper.getInstance(propertiesFile, prefix);
-				mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
+
+				try {
+					mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -283,11 +281,10 @@ public class MongoDbUtils {
 	 * @param fields: Entity fields
 	 * @param entityFields: Entity EntityField list
 	 * @return Query
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Query entityToQuery(T entity, List<String> fields, List<EntityField> entityFields) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> Query entityToQuery(T entity, List<String> fields, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
 		Query query = new Query();
 
 		for (EntityField entityField : entityFields) {
@@ -319,11 +316,10 @@ public class MongoDbUtils {
 	 * @param entity: Entity object
 	 * @param entityFields: Entity EntityField list
 	 * @return Update
-	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
 		Update update = new Update();
 
 		for (EntityField entityField : entityFields) {
