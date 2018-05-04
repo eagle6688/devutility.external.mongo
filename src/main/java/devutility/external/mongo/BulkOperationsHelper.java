@@ -110,11 +110,22 @@ public class BulkOperationsHelper {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fields, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
+		List<EntityField> entityFields = ClassHelper.getEntityFields(fields, clazz);
+		return toPairs(list, entityFields);
+	}
+
+	/**
+	 * Entities to query and update pairs.
+	 * @param list: Entities.
+	 * @param entityFields: EntityField list of {@code T}
+	 * @return {@code List<Pair<Query,Update>>}
+	 * @throws ReflectiveOperationException
+	 */
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<EntityField> entityFields) throws ReflectiveOperationException {
 		List<Pair<Query, Update>> pairs = new ArrayList<>(list.size());
-		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
 
 		for (T entity : list) {
-			Query query = MongoDbUtils.entityToQuery(entity, fields, entityFields);
+			Query query = MongoDbUtils.entityToQuery(entity, entityFields);
 			Update update = MongoDbUtils.entityToUpdate(entity, entityFields);
 			pairs.add(Pair.of(query, update));
 		}
