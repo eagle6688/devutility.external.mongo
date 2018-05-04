@@ -16,6 +16,7 @@ import com.mongodb.bulk.BulkWriteResult;
 
 import devutility.internal.lang.ClassHelper;
 import devutility.internal.lang.models.EntityField;
+import devutility.internal.lang.models.EntityFieldUtils;
 
 public class BulkOperationsHelper {
 	/**
@@ -109,24 +110,26 @@ public class BulkOperationsHelper {
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
 	 */
-	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fields, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		List<EntityField> entityFields = ClassHelper.getEntityFields(fields, clazz);
-		return toPairs(list, entityFields);
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fieldsForQuery, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
+		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
+		List<EntityField> entityFieldsForQuery = EntityFieldUtils.includeEntityFields(entityFields, fieldsForQuery);
+		return toPairs(list, entityFieldsForQuery, entityFields);
 	}
 
 	/**
 	 * Entities to query and update pairs.
 	 * @param list: Entities.
-	 * @param entityFields: EntityField list of {@code T}
+	 * @param entityFieldsForQuery: EntityField for query.
+	 * @param entityFieldsForUpdate: EntityField for update.
 	 * @return {@code List<Pair<Query,Update>>}
 	 * @throws ReflectiveOperationException
 	 */
-	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<EntityField> entityFields) throws ReflectiveOperationException {
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<EntityField> entityFieldsForQuery, List<EntityField> entityFieldsForUpdate) throws ReflectiveOperationException {
 		List<Pair<Query, Update>> pairs = new ArrayList<>(list.size());
 
 		for (T entity : list) {
-			Query query = MongoDbUtils.entityToQuery(entity, entityFields);
-			Update update = MongoDbUtils.entityToUpdate(entity, entityFields);
+			Query query = MongoDbUtils.entityToQuery(entity, entityFieldsForQuery);
+			Update update = MongoDbUtils.entityToUpdate(entity, entityFieldsForUpdate);
 			pairs.add(Pair.of(query, update));
 		}
 
