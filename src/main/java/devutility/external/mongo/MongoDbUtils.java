@@ -35,6 +35,8 @@ import devutility.internal.dao.DbInstanceHelper;
 import devutility.internal.dao.models.DbInstance;
 import devutility.internal.lang.ClassHelper;
 import devutility.internal.lang.models.EntityField;
+import devutility.internal.lang.models.EntityFieldUtils;
+import devutility.internal.util.CollectionUtils;
 
 public class MongoDbUtils {
 	/**
@@ -278,14 +280,30 @@ public class MongoDbUtils {
 
 	/**
 	 * Transfer entity to Query
-	 * @param entity: Entity object
-	 * @param fields: Entity fields
-	 * @param entityFields: Entity EntityField list
+	 * @param entity: Entity object.
+	 * @param entityFields: Entity EntityField list.
+	 * @param fields: Fields want to include.
 	 * @return Query
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
 	 */
-	public static <T> Query entityToQuery(T entity, List<String> fields, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
+	public static <T> Query entityToQuery(T entity, List<EntityField> entityFields, List<String> fields) throws IllegalArgumentException, ReflectiveOperationException {
+		List<EntityField> targetEntityFields = EntityFieldUtils.includeEntityFields(entityFields, fields);
+		return entityToQuery(entity, targetEntityFields);
+	}
+
+	/**
+	 * Transfer entity to Query
+	 * @param entity: Entity object.
+	 * @param entityFields: Entity EntityField list.
+	 * @return Query
+	 * @throws ReflectiveOperationException
+	 */
+	public static <T> Query entityToQuery(T entity, List<EntityField> entityFields) throws ReflectiveOperationException {
+		if (entity == null || CollectionUtils.nullOrEmpty(entityFields)) {
+			return null;
+		}
+
 		Query query = new Query();
 
 		for (EntityField entityField : entityFields) {
@@ -303,9 +321,7 @@ public class MongoDbUtils {
 					fieldName = "_id";
 				}
 
-				if (fields.contains(fieldName)) {
-					query.addCriteria(Criteria.where(fieldName).is(value));
-				}
+				query.addCriteria(Criteria.where(fieldName).is(value));
 			}
 		}
 
@@ -321,6 +337,10 @@ public class MongoDbUtils {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
+		if (entity == null || CollectionUtils.nullOrEmpty(entityFields)) {
+			return null;
+		}
+
 		Update update = new Update();
 
 		for (EntityField entityField : entityFields) {
