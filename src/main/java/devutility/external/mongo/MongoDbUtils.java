@@ -33,6 +33,7 @@ import com.mongodb.WriteResult;
 import devutility.internal.base.SingletonFactory;
 import devutility.internal.dao.DbInstanceHelper;
 import devutility.internal.dao.models.DbInstance;
+import devutility.internal.lang.ClassHelper;
 import devutility.internal.lang.models.EntityField;
 
 public class MongoDbUtils {
@@ -344,5 +345,19 @@ public class MongoDbUtils {
 		}
 
 		return update;
+	}
+
+	/**
+	 * Transfer entity to Update
+	 * @param entity: Entity object
+	 * @param clazz
+	 * @param excludeFields: Fields that want to exclude.
+	 * @return Update
+	 * @throws IllegalArgumentException
+	 * @throws ReflectiveOperationException
+	 */
+	public static <T> Update entityToUpdate(T entity, Class<T> clazz, List<String> excludeFields) throws IllegalArgumentException, ReflectiveOperationException {
+		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz, excludeFields);
+		return entityToUpdate(entity, entityFields);
 	}
 }
