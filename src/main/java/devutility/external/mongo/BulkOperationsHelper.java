@@ -91,14 +91,8 @@ public class BulkOperationsHelper {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		List<Pair<Query, Update>> pairs = new ArrayList<>(list.size());
 		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
-
-		for (T entity : list) {
-			pairs.add(toPair(entity, entityFields));
-		}
-
-		return pairs;
+		return toPairs(list, entityFields, entityFields);
 	}
 
 	/**
@@ -154,15 +148,15 @@ public class BulkOperationsHelper {
 	/**
 	 * Save list
 	 * @param list: Entities.
-	 * @param fields: Fields can determine an unique entity.
+	 * @param fieldsForQuery: Fields can determine an unique entity.
 	 * @param clazz: Entity class.
 	 * @return BulkWriteResult
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
 	 */
-	public <T> BulkWriteResult save(List<T> list, List<String> fields, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
+	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
-		List<Pair<Query, Update>> pairs = toPairs(list, fields, clazz);
+		List<Pair<Query, Update>> pairs = toPairs(list, fieldsForQuery, clazz);
 		bulkOperations.upsert(pairs);
 		return bulkOperations.execute();
 	}

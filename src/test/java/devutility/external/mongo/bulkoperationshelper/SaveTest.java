@@ -1,5 +1,6 @@
 package devutility.external.mongo.bulkoperationshelper;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.devutility.test.entity.mongo.Student;
@@ -14,6 +15,13 @@ public class SaveTest extends BaseTest {
 	public void run() {
 		List<Student> list = Student.list(100);
 		BulkOperationsHelper bulkOperationsHelper = new BulkOperationsHelper(mongoOperations);
+
+		try {
+			BulkWriteResult result = bulkOperationsHelper.save(list, Arrays.asList("id"), Student.class);
+			System.out.println(result);
+		} catch (IllegalArgumentException | ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
 
 		try {
 			BulkWriteResult result = bulkOperationsHelper.save(list, Student.class);
