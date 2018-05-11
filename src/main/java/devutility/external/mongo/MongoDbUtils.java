@@ -284,7 +284,7 @@ public class MongoDbUtils {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> Query entityToQuery(T entity, List<EntityField> entityFields) throws ReflectiveOperationException {
-		if (entity == null || CollectionUtils.nullOrEmpty(entityFields)) {
+		if (entity == null || CollectionUtils.isNullOrEmpty(entityFields)) {
 			return null;
 		}
 
@@ -321,7 +321,7 @@ public class MongoDbUtils {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> Update entityToUpdate(T entity, List<EntityField> entityFields) throws IllegalArgumentException, ReflectiveOperationException {
-		if (entity == null || CollectionUtils.nullOrEmpty(entityFields)) {
+		if (entity == null || CollectionUtils.isNullOrEmpty(entityFields)) {
 			return null;
 		}
 
