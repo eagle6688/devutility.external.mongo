@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -349,5 +350,30 @@ public class MongoDbUtils {
 		}
 
 		return update;
+	}
+
+	/**
+	 * Query elements by query, return a distinct list include specified field.
+	 * @param mongoOperations: MongoOperations object.
+	 * @param collection: Collection name.
+	 * @param field: Include field.
+	 * @param query: Query object.
+	 * @return {@code List<T>}
+	 */
+	public static <T> List<T> distinct(MongoOperations mongoOperations, String collection, String field, Query query) {
+		String excludeField = "_id";
+
+		if (!excludeField.equals(field)) {
+			excludeField = field;
+		}
+
+		query.fields().exclude(excludeField).include(field);
+
+		@SuppressWarnings("unchecked")
+		List<T> result = mongoOperations.getCollection(collection).distinct(field, query.getQueryObject());
+
+		List<T> list = new LinkedList<>();
+		result.iterator().forEachRemaining(list::add);
+		return list;
 	}
 }
