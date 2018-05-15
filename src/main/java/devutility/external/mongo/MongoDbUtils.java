@@ -3,6 +3,7 @@ package devutility.external.mongo;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +28,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.result.UpdateResult;
 
 import devutility.internal.base.SingletonFactory;
@@ -343,5 +345,28 @@ public class MongoDbUtils {
 		}
 
 		return update;
+	}
+
+	/**
+	 * Query elements by query, return a distinct list include specified field.
+	 * @param mongoOperations: MongoOperations object.
+	 * @param collection: Collection name.
+	 * @param field: Include field.
+	 * @param query: Query object.
+	 * @param clazz: Class object for type.
+	 * @return {@code List<T>}
+	 */
+	public static <T> List<T> distinct(MongoOperations mongoOperations, String collection, String field, Query query, Class<T> clazz) {
+		String excludeField = "_id";
+
+		if (!excludeField.equals(field)) {
+			excludeField = field;
+		}
+
+		query.fields().exclude(excludeField).include(field);
+		DistinctIterable<T> result = mongoOperations.getCollection(collection).distinct(field, clazz);
+		List<T> list = new LinkedList<>();
+		result.iterator().forEachRemaining(list::add);
+		return list;
 	}
 }
