@@ -3,7 +3,7 @@ package devutility.external.mongo.config;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import devutility.external.mongo.MongoDbUtils;
-import devutility.internal.dao.DbInstanceHelper;
+import devutility.internal.dao.DbInstanceUtils;
 import devutility.internal.dao.models.DbInstance;
 
 public class DbConfig {
@@ -16,7 +16,7 @@ public class DbConfig {
 	 * MongoDbHolder
 	 */
 	private static class MongoDbHolder {
-		private static DbInstance dbInstance = DbInstanceHelper.getInstance(CONFIG_NAME, "mongodb");
+		private static DbInstance dbInstance = DbInstanceUtils.getInstance(CONFIG_NAME, "mongodb");
 		public static MongoTemplate mongoTemplate = MongoDbUtils.mongoTemplate(dbInstance);
 	}
 

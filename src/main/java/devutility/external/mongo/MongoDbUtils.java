@@ -32,7 +32,7 @@ import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.result.UpdateResult;
 
 import devutility.internal.base.SingletonFactory;
-import devutility.internal.dao.DbInstanceHelper;
+import devutility.internal.dao.DbInstanceUtils;
 import devutility.internal.dao.models.DbInstance;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.util.CollectionUtils;
@@ -102,7 +102,7 @@ public class MongoDbUtils {
 
 		synchronized (MongoDbUtils.class) {
 			if (mongoTemplate == null) {
-				DbInstance dbInstance = DbInstanceHelper.getInstance(propertiesFile, prefix);
+				DbInstance dbInstance = DbInstanceUtils.getInstance(propertiesFile, prefix);
 				mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
 			}
 		}
