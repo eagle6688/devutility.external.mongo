@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.DistinctIterable;
@@ -46,6 +47,11 @@ public class MongoDbUtils {
 	public static MongoClient mongoClient(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
+		}
+
+		if (dbInstance.getUrl() != null) {
+			MongoClientURI mongoClientURI = new MongoClientURI(dbInstance.getUrl());
+			return new MongoClient(mongoClientURI);
 		}
 
 		MongoCredential mongoCredential = createMongoCredential(dbInstance);
