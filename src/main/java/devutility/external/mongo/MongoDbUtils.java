@@ -27,6 +27,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteResult;
@@ -34,6 +35,7 @@ import com.mongodb.WriteResult;
 import devutility.internal.base.SingletonFactory;
 import devutility.internal.dao.DbInstanceUtils;
 import devutility.internal.dao.models.DbInstance;
+import devutility.internal.lang.StringHelper;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.util.CollectionUtils;
 
@@ -47,6 +49,11 @@ public class MongoDbUtils {
 	public static MongoClient mongoClient(DbInstance dbInstance) throws UnknownHostException {
 		if (dbInstance == null) {
 			return null;
+		}
+
+		if (StringHelper.isNotEmpty(dbInstance.getUrl())) {
+			MongoClientURI mongoClientURI = new MongoClientURI(dbInstance.getUrl());
+			return new MongoClient(mongoClientURI);
 		}
 
 		MongoCredential mongoCredential = createMongoCredential(dbInstance);
