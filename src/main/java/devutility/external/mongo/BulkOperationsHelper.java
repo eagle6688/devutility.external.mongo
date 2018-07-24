@@ -98,7 +98,7 @@ public class BulkOperationsHelper {
 	/**
 	 * Entities to query and update pairs.
 	 * @param list: Entities.
-	 * @param fields: Fields contains in query.
+	 * @param fieldsForQuery: Fields contains in query.
 	 * @param clazz: Entity class.
 	 * @return {@literal List<Pair<Query,Update>>}
 	 * @throws IllegalArgumentException
