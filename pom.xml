@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.eagle6688</groupId>
 	<artifactId>devutility.external.mongo</artifactId>
-	<version>1.10.11.8</version>
+	<version>1.10.11.9</version>
 	<packaging>jar</packaging>
 	<name>devutility.external.mongo</name>
 	<description>Some utilities for Spring Data Mongodb Version 1.10.11</description>
