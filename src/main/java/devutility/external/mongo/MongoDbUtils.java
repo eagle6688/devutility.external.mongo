@@ -35,56 +35,34 @@ import com.mongodb.client.result.UpdateResult;
 import devutility.internal.base.SingletonFactory;
 import devutility.internal.dao.DbInstanceUtils;
 import devutility.internal.dao.models.DbInstance;
+import devutility.internal.lang.StringHelper;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.util.CollectionUtils;
 
 public class MongoDbUtils {
 	/**
-	 * Create MongoClient object
-	 * @param dbInstance: DbInstance object
-	 * @return MongoClient
+	 * Create an MongoTemplate object with MongoDB uri.
+	 * @param uri: MongoDB uri.
+	 * @return MongoTemplate
 	 */
-	public static MongoClient mongoClient(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		if (dbInstance.getUrl() != null) {
-			MongoClientURI mongoClientURI = new MongoClientURI(dbInstance.getUrl());
-			return new MongoClient(mongoClientURI);
-		}
-
-		MongoCredential mongoCredential = createMongoCredential(dbInstance);
-		ServerAddress serverAddress = createServerAddress(dbInstance);
-		return mongoClient(serverAddress, mongoCredential);
+	public static MongoTemplate mongoTemplate(String uri) {
+		MongoDbFactory mongoDbFactory = mongoDbFactory(uri);
+		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
 	}
 
 	/**
-	 * Create MongoClient object
-	 * @param serverAddress: ServerAddress object
-	 * @param mongoCredential: MongoCredential object
-	 * @return MongoClient
-	 */
-	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
-		if (serverAddress == null) {
-			return null;
-		}
-
-		if (mongoCredential == null) {
-			return new MongoClient(serverAddress);
-		}
-
-		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
-	}
-
-	/**
-	 * Create MongoTemplate object
+	 * Create an MongoTemplate object
 	 * @param dbInstance: DbInstance object
 	 * @return MongoTemplate
 	 */
 	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
+		}
+
+		if (StringHelper.isNotEmpty(dbInstance.getUri())) {
+			return mongoTemplate(dbInstance.getUri());
 		}
 
 		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
@@ -117,6 +95,73 @@ public class MongoDbUtils {
 	}
 
 	/**
+	 * Create a MongoClient object.
+	 * @param uri: MongoDB connection uri.
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(String uri) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri);
+		return new MongoClient(mongoClientURI);
+	}
+
+	/**
+	 * Create MongoClient object
+	 * @param dbInstance: DbInstance object
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		MongoCredential mongoCredential = createMongoCredential(dbInstance);
+		ServerAddress serverAddress = createServerAddress(dbInstance);
+		return mongoClient(serverAddress, mongoCredential);
+	}
+
+	/**
+	 * Create MongoClient object
+	 * @param serverAddress: ServerAddress object
+	 * @param mongoCredential: MongoCredential object
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
+		if (serverAddress == null) {
+			return null;
+		}
+
+		if (mongoCredential == null) {
+			return new MongoClient(serverAddress);
+		}
+
+		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+	}
+
+	/**
+	 * Create MongoDbFactory object.
+	 * @param uri
+	 * @return MongoDbFactory
+	 */
+	public static MongoDbFactory mongoDbFactory(String uri) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri);
+		return new SimpleMongoDbFactory(mongoClientURI);
+	}
+
+	/**
+	 * Create MongoDbFactory object
+	 * @param dbInstance: Database instance
+	 * @return MongoDbFactory
+	 */
+	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		MongoClient mongoClient = mongoClient(dbInstance);
+		return new SimpleMongoDbFactory(mongoClient, dbInstance.getDatabase());
+	}
+
+	/**
 	 * Create MongoCredential object
 	 * @param dbInstance: DbInstance object
 	 * @return MongoCredential
@@ -140,20 +185,6 @@ public class MongoDbUtils {
 		}
 
 		return new ServerAddress(dbInstance.getHost(), dbInstance.getPort());
-	}
-
-	/**
-	 * Create MongoDbFactory object
-	 * @param dbInstance: Database instance
-	 * @return MongoDbFactory
-	 */
-	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		MongoClient mongoClient = mongoClient(dbInstance);
-		return new SimpleMongoDbFactory(mongoClient, dbInstance.getDatabase());
 	}
 
 	/**
