@@ -41,8 +41,8 @@ import devutility.internal.util.CollectionUtils;
 
 public class MongoDbUtils {
 	/**
-	 * Create an MongoTemplate object with MongoDB uri.
-	 * @param uri: MongoDB uri.
+	 * Create a MongoTemplate object.
+	 * @param uri: MongoDB connection uri.
 	 * @return MongoTemplate
 	 */
 	public static MongoTemplate mongoTemplate(String uri) {
@@ -52,8 +52,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create an MongoTemplate object
-	 * @param dbInstance: DbInstance object
+	 * Create a MongoTemplate object.
+	 * @param dbInstance: DbInstance object.
 	 * @return MongoTemplate
 	 */
 	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
@@ -72,7 +72,7 @@ public class MongoDbUtils {
 
 	/**
 	 * Get or create a MongoTemplate instance.
-	 * @param propertiesFile: Properties file
+	 * @param propertiesFile: Properties file.
 	 * @param prefix: Prefix of mongodb config in properties file.
 	 * @return MongoTemplate
 	 */
@@ -105,8 +105,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoClient object
-	 * @param dbInstance: DbInstance object
+	 * Create a MongoClient object.
+	 * @param dbInstance: DbInstance object.
 	 * @return MongoClient
 	 */
 	public static MongoClient mongoClient(DbInstance dbInstance) {
@@ -120,9 +120,9 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoClient object
-	 * @param serverAddress: ServerAddress object
-	 * @param mongoCredential: MongoCredential object
+	 * Create a MongoClient object.
+	 * @param serverAddress: ServerAddress object.
+	 * @param mongoCredential: MongoCredential object.
 	 * @return MongoClient
 	 */
 	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
@@ -138,8 +138,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoDbFactory object.
-	 * @param uri
+	 * Create a MongoDbFactory object.
+	 * @param uri: MongoDB connection uri.
 	 * @return MongoDbFactory
 	 */
 	public static MongoDbFactory mongoDbFactory(String uri) {
@@ -148,8 +148,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoDbFactory object
-	 * @param dbInstance: Database instance
+	 * Create a MongoDbFactory object.
+	 * @param dbInstance: Database instance.
 	 * @return MongoDbFactory
 	 */
 	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
@@ -162,8 +162,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoCredential object
-	 * @param dbInstance: DbInstance object
+	 * Create a MongoCredential object.
+	 * @param dbInstance: DbInstance object.
 	 * @return MongoCredential
 	 */
 	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
@@ -175,8 +175,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create ServerAddress object
-	 * @param dbInstance: Database instance
+	 * Create a ServerAddress object.
+	 * @param dbInstance: Database instance.
 	 * @return ServerAddress
 	 */
 	private static ServerAddress createServerAddress(DbInstance dbInstance) {
@@ -188,8 +188,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create default MongoConverter
-	 * @param mongoDbFactory: MongoDbFactory object
+	 * Create a default MongoConverter object.
+	 * @param mongoDbFactory: MongoDbFactory object.
 	 * @return MongoConverter
 	 */
 	private static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
@@ -212,7 +212,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create index
+	 * Create index.
 	 * @param mongoOperations: MongoOperations object.
 	 * @param clazz: Collection entity class.
 	 * @param indexMap: Index map, format: field, Direction
@@ -224,8 +224,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create index
-	 * @param indexMap: Index map, format: field, Direction
+	 * Create index.
+	 * @param indexMap: Index map, format: field, Direction.
 	 * @param unique: Unique index or not?
 	 * @return Index
 	 */
@@ -245,11 +245,11 @@ public class MongoDbUtils {
 
 	/**
 	 * Update
-	 * @param mongoOperations: MongoOperations object
-	 * @param id: Id value
-	 * @param setField: Field need update
-	 * @param setValue: Field value need update
-	 * @param clazz: Collection entity class
+	 * @param mongoOperations: MongoOperations object.
+	 * @param id: Id value.
+	 * @param setField: Field need update.
+	 * @param setValue: Field value need update.
+	 * @param clazz: Collection entity class.
 	 * @return UpdateResult
 	 */
 	public static UpdateResult update(MongoOperations mongoOperations, String id, String setField, Object setValue, Class<?> clazz) {
@@ -258,12 +258,12 @@ public class MongoDbUtils {
 
 	/**
 	 * Update
-	 * @param mongoOperations: MongoOperations object
-	 * @param keyField: Primary key
-	 * @param keyValue: Primary key value
-	 * @param setField: Field need update
-	 * @param setValue: Field value need update
-	 * @param clazz: Collection entity class
+	 * @param mongoOperations: MongoOperations object.
+	 * @param keyField: Primary key.
+	 * @param keyValue: Primary key value.
+	 * @param setField: Field need update.
+	 * @param setValue: Field value need update.
+	 * @param clazz: Collection entity class.
 	 * @return UpdateResult
 	 */
 	public static UpdateResult update(MongoOperations mongoOperations, String keyField, Object keyValue, String setField, Object setValue, Class<?> clazz) {
