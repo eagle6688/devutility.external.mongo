@@ -41,42 +41,14 @@ import devutility.internal.util.CollectionUtils;
 
 public class MongoDbUtils {
 	/**
-	 * Create MongoClient object
-	 * @param dbInstance: DbInstance object
-	 * @return MongoClient
-	 * @throws UnknownHostException
+	 * Create a MongoTemplate object.
+	 * @param uri: MongoDB connection uri.
+	 * @return MongoTemplate
 	 */
-	public static MongoClient mongoClient(DbInstance dbInstance) throws UnknownHostException {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		if (StringHelper.isNotEmpty(dbInstance.getUrl())) {
-			MongoClientURI mongoClientURI = new MongoClientURI(dbInstance.getUrl());
-			return new MongoClient(mongoClientURI);
-		}
-
-		MongoCredential mongoCredential = createMongoCredential(dbInstance);
-		ServerAddress serverAddress = createServerAddress(dbInstance);
-		return mongoClient(serverAddress, mongoCredential);
-	}
-
-	/**
-	 * Create MongoClient object
-	 * @param serverAddress: ServerAddress object
-	 * @param mongoCredential: MongoCredential object
-	 * @return MongoClient
-	 */
-	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
-		if (serverAddress == null) {
-			return null;
-		}
-
-		if (mongoCredential == null) {
-			return new MongoClient(serverAddress);
-		}
-
-		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+	public static MongoTemplate mongoTemplate(String uri) throws UnknownHostException {
+		MongoDbFactory mongoDbFactory = mongoDbFactory(uri);
+		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
 	}
 
 	/**
@@ -88,6 +60,10 @@ public class MongoDbUtils {
 	public static MongoTemplate mongoTemplate(DbInstance dbInstance) throws UnknownHostException {
 		if (dbInstance == null) {
 			return null;
+		}
+
+		if (StringHelper.isNotEmpty(dbInstance.getUri())) {
+			return mongoTemplate(dbInstance.getUri());
 		}
 
 		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
@@ -125,34 +101,61 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create MongoCredential object
-	 * @param dbInstance: DbInstance object
-	 * @return MongoCredential
+	 * Create a MongoClient object.
+	 * @param uri: MongoDB connection uri.
+	 * @return MongoClient
 	 */
-	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
-		if (dbInstance == null || dbInstance.getLoginName() == null) {
-			return null;
-		}
-
-		return MongoCredential.createCredential(dbInstance.getLoginName(), dbInstance.getDatabase(), dbInstance.getPassword().toCharArray());
+	public static MongoClient mongoClient(String uri) throws UnknownHostException {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri);
+		return new MongoClient(mongoClientURI);
 	}
 
 	/**
-	 * Create ServerAddress object
-	 * @param dbInstance: Database instance
-	 * @return ServerAddress
+	 * Create a MongoClient object.
+	 * @param dbInstance: DbInstance object.
+	 * @return MongoClient
 	 * @throws UnknownHostException
 	 */
-	private static ServerAddress createServerAddress(DbInstance dbInstance) throws UnknownHostException {
+	public static MongoClient mongoClient(DbInstance dbInstance) throws UnknownHostException {
 		if (dbInstance == null) {
 			return null;
 		}
 
-		return new ServerAddress(dbInstance.getHost(), dbInstance.getPort());
+		MongoCredential mongoCredential = createMongoCredential(dbInstance);
+		ServerAddress serverAddress = createServerAddress(dbInstance);
+		return mongoClient(serverAddress, mongoCredential);
 	}
 
 	/**
-	 * Create MongoDbFactory object
+	 * Create a MongoClient object.
+	 * @param serverAddress: ServerAddress object.
+	 * @param mongoCredential: MongoCredential object.
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
+		if (serverAddress == null) {
+			return null;
+		}
+
+		if (mongoCredential == null) {
+			return new MongoClient(serverAddress);
+		}
+
+		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+	}
+
+	/**
+	 * Create a MongoDbFactory object.
+	 * @param uri: MongoDB connection uri.
+	 * @return MongoDbFactory
+	 */
+	public static MongoDbFactory mongoDbFactory(String uri) throws UnknownHostException {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri);
+		return new SimpleMongoDbFactory(mongoClientURI);
+	}
+
+	/**
+	 * Create a MongoDbFactory object.
 	 * @param dbInstance: Database instance
 	 * @return MongoDbFactory
 	 * @throws UnknownHostException
@@ -167,8 +170,35 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create default MongoConverter
-	 * @param mongoDbFactory: MongoDbFactory object
+	 * Create a MongoCredential object.
+	 * @param dbInstance: DbInstance object
+	 * @return MongoCredential
+	 */
+	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
+		if (dbInstance == null || dbInstance.getLoginName() == null) {
+			return null;
+		}
+
+		return MongoCredential.createCredential(dbInstance.getLoginName(), dbInstance.getDatabase(), dbInstance.getPassword().toCharArray());
+	}
+
+	/**
+	 * Create a ServerAddress object.
+	 * @param dbInstance: Database instance
+	 * @return ServerAddress
+	 * @throws UnknownHostException
+	 */
+	private static ServerAddress createServerAddress(DbInstance dbInstance) throws UnknownHostException {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		return new ServerAddress(dbInstance.getHost(), dbInstance.getPort());
+	}
+
+	/**
+	 * Create a default MongoConverter object.
+	 * @param mongoDbFactory: MongoDbFactory object.
 	 * @return MongoConverter
 	 */
 	private static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
@@ -187,7 +217,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create index
+	 * Create index.
 	 * @param mongoOperations: MongoOperations object.
 	 * @param clazz: Collection entity class.
 	 * @param indexMap: Index map, format: field, Direction
@@ -199,7 +229,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create index
+	 * Create index.
 	 * @param indexMap: Index map, format: field, Direction
 	 * @param unique: Unique index or not?
 	 * @return Index
@@ -261,7 +291,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Is field
+	 * Is field?
 	 * @param annotation: Field annotation object
 	 * @return boolean
 	 */
@@ -270,7 +300,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Get field name
+	 * Get field name.
 	 * @param annotation: Field annotation object
 	 * @return String
 	 */
@@ -285,7 +315,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Transfer entity to Query
+	 * Transfer entity to Query.
 	 * @param entity: Entity object.
 	 * @param entityFields: Entity EntityField list.
 	 * @return Query
@@ -321,7 +351,7 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Transfer entity to Update
+	 * Transfer entity to Update.
 	 * @param entity: Entity object
 	 * @param entityFields: Entity EntityField list
 	 * @return Update
