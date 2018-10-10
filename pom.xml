@@ -66,15 +66,15 @@
 		<dependency>
 			<groupId>com.github.eagle6688</groupId>
 			<artifactId>devutility.internal</artifactId>
-			<version>1.1.17</version>
+			<version>1.2.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- devutility end -->
 		<!-- Test -->
 		<dependency>
-			<groupId>com.devutility</groupId>
+			<groupId>com.github.eagle6688</groupId>
 			<artifactId>devutility.test.model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Test end -->

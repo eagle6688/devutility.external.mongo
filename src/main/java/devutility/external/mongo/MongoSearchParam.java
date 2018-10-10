@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import devutility.internal.lang.StringHelper;
+import devutility.internal.lang.StringUtils;
 import devutility.internal.util.CollectionUtils;
 
 public abstract class MongoSearchParam {
@@ -77,7 +77,7 @@ public abstract class MongoSearchParam {
 	 * @param value Search value
 	 */
 	protected void is(String field, Object value) {
-		if (StringHelper.isNullOrEmpty(field)) {
+		if (StringUtils.isNullOrEmpty(field)) {
 			return;
 		}
 
@@ -90,7 +90,7 @@ public abstract class MongoSearchParam {
 	 * @param values Search values
 	 */
 	protected void in(String field, Collection<?> values) {
-		if (StringHelper.isNullOrEmpty(field) || CollectionUtils.isNullOrEmpty(values)) {
+		if (StringUtils.isNullOrEmpty(field) || CollectionUtils.isNullOrEmpty(values)) {
 			return;
 		}
 

@@ -33,10 +33,10 @@ import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.result.UpdateResult;
 
 import devutility.internal.base.SingletonFactory;
-import devutility.internal.dao.DbInstanceUtils;
-import devutility.internal.dao.models.DbInstance;
-import devutility.internal.lang.StringHelper;
+import devutility.internal.data.DbInstanceUtils;
+import devutility.internal.lang.StringUtils;
 import devutility.internal.lang.models.EntityField;
+import devutility.internal.models.DbInstance;
 import devutility.internal.util.CollectionUtils;
 
 public class MongoDbUtils {
@@ -61,7 +61,7 @@ public class MongoDbUtils {
 			return null;
 		}
 
-		if (StringHelper.isNotEmpty(dbInstance.getUri())) {
+		if (StringUtils.isNotEmpty(dbInstance.getUri())) {
 			return mongoTemplate(dbInstance.getUri());
 		}
 

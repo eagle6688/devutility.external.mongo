@@ -14,7 +14,7 @@ import org.springframework.data.util.Pair;
 
 import com.mongodb.bulk.BulkWriteResult;
 
-import devutility.internal.lang.ClassHelper;
+import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.lang.models.EntityFieldUtils;
 
@@ -91,7 +91,7 @@ public class BulkOperationsHelper {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
+		List<EntityField> entityFields = ClassUtils.getEntityFields(clazz);
 		return toPairs(list, entityFields, entityFields);
 	}
 
@@ -105,7 +105,7 @@ public class BulkOperationsHelper {
 	 * @throws ReflectiveOperationException
 	 */
 	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fieldsForQuery, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		List<EntityField> entityFields = ClassHelper.getEntityFields(clazz);
+		List<EntityField> entityFields = ClassUtils.getEntityFields(clazz);
 		List<EntityField> entityFieldsForQuery = EntityFieldUtils.includeEntityFields(entityFields, fieldsForQuery);
 		return toPairs(list, entityFieldsForQuery, entityFields);
 	}
