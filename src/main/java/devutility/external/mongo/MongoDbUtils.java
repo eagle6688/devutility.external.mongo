@@ -125,6 +125,7 @@ public class MongoDbUtils {
 	 * @param mongoCredential: MongoCredential object.
 	 * @return MongoClient
 	 */
+	@Deprecated
 	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
 		if (serverAddress == null) {
 			return null;
@@ -192,7 +193,7 @@ public class MongoDbUtils {
 	 * @param mongoDbFactory: MongoDbFactory object.
 	 * @return MongoConverter
 	 */
-	private static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
+	public static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
 		if (mongoDbFactory == null) {
 			return null;
 		}
