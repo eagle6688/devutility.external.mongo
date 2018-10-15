@@ -53,6 +53,18 @@ public class MongoDbUtils {
 
 	/**
 	 * Create a MongoTemplate object.
+	 * @param uri: MongoDB connection uri.
+	 * @param converters: Customer converters.
+	 * @return MongoTemplate
+	 */
+	public static MongoTemplate mongoTemplate(String uri, List<Object> converters) {
+		MongoDbFactory mongoDbFactory = mongoDbFactory(uri);
+		MongoConverter mongoConverter = mongoConverter(mongoDbFactory, converters);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
+	 * Create a MongoTemplate object.
 	 * @param dbInstance: DbInstance object.
 	 * @return MongoTemplate
 	 */
@@ -194,12 +206,22 @@ public class MongoDbUtils {
 	 * @return MongoConverter
 	 */
 	public static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
+		return mongoConverter(mongoDbFactory, Collections.emptyList());
+	}
+
+	/**
+	 * Create a MongoConverter object.
+	 * @param mongoDbFactory: MongoDbFactory object.
+	 * @param converters: Customer converters.
+	 * @return MongoConverter
+	 */
+	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<Object> converters) {
 		if (mongoDbFactory == null) {
 			return null;
 		}
 
 		DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDbFactory);
-		MongoCustomConversions conversions = new MongoCustomConversions(Collections.emptyList());
+		MongoCustomConversions conversions = new MongoCustomConversions(converters);
 
 		MongoMappingContext mappingContext = new MongoMappingContext();
 		mappingContext.setSimpleTypeHolder(conversions.getSimpleTypeHolder());
