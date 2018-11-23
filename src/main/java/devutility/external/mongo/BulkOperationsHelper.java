@@ -113,6 +113,23 @@ public class BulkOperationsHelper {
 	/**
 	 * Entities to query and update pairs.
 	 * @param list: Entities.
+	 * @param fieldsForQuery: Fields contains in query.
+	 * @param fieldsForUpdate: Fields contains in update.
+	 * @param clazz
+	 * @return {@code List<Pair<Query,Update>>}
+	 * @throws IllegalArgumentException
+	 * @throws ReflectiveOperationException
+	 */
+	public static <T> List<Pair<Query, Update>> toPairs(List<T> list, List<String> fieldsForQuery, List<String> fieldsForUpdate, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
+		List<EntityField> entityFields = ClassUtils.getEntityFields(clazz);
+		List<EntityField> entityFieldsForQuery = EntityFieldUtils.includeEntityFields(entityFields, fieldsForQuery);
+		List<EntityField> entityFieldsForUpdate = EntityFieldUtils.includeEntityFields(entityFields, fieldsForUpdate);
+		return toPairs(list, entityFieldsForQuery, entityFieldsForUpdate);
+	}
+
+	/**
+	 * Entities to query and update pairs.
+	 * @param list: Entities.
 	 * @param entityFieldsForQuery: EntityField for query.
 	 * @param entityFieldsForUpdate: EntityField for update.
 	 * @return {@code List<Pair<Query,Update>>}
@@ -157,6 +174,23 @@ public class BulkOperationsHelper {
 	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
 		List<Pair<Query, Update>> pairs = toPairs(list, fieldsForQuery, clazz);
+		bulkOperations.upsert(pairs);
+		return bulkOperations.execute();
+	}
+
+	/**
+	 * Save list.
+	 * @param list: Entities.
+	 * @param fieldsForQuery: Fields can determine an unique entity.
+	 * @param fieldsForUpdate: Fields for update.
+	 * @param clazz: Entity class.
+	 * @return BulkWriteResult
+	 * @throws IllegalArgumentException
+	 * @throws ReflectiveOperationException
+	 */
+	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, List<String> fieldsForUpdate, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
+		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
+		List<Pair<Query, Update>> pairs = toPairs(list, fieldsForQuery, fieldsForUpdate, clazz);
 		bulkOperations.upsert(pairs);
 		return bulkOperations.execute();
 	}
