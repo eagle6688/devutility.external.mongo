@@ -3,10 +3,13 @@ package devutility.external.mongo;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -244,6 +247,34 @@ public class MongoDbUtils {
 	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, Map<String, Direction> indexMap, boolean unique) {
 		Index index = createIndex(indexMap, unique);
 		mongoOperations.indexOps(clazz).ensureIndex(index);
+	}
+
+	/**
+	 * Create index with provided fields.
+	 * @param mongoOperations: MongoOperations object.
+	 * @param clazz: Collection entity class.
+	 * @param field: Field want to create index.
+	 * @param unique: Unique index or not?
+	 */
+	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, String field, boolean unique) {
+		createIndex(mongoOperations, clazz, new HashSet<>(Arrays.asList(field)), unique);
+	}
+
+	/**
+	 * Create index with provided fields.
+	 * @param mongoOperations: MongoOperations object.
+	 * @param clazz: Collection entity class.
+	 * @param fields: Fields want to create index.
+	 * @param unique: Unique index or not?
+	 */
+	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, Set<String> fields, boolean unique) {
+		Map<String, Direction> indexMap = new HashMap<>();
+
+		for (String field : fields) {
+			indexMap.put(field, Direction.ASC);
+		}
+
+		createIndex(mongoOperations, clazz, indexMap, unique);
 	}
 
 	/**
