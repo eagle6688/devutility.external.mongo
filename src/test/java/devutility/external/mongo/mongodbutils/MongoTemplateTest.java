@@ -9,6 +9,7 @@ import devutility.internal.test.TestExecutor;
 public class MongoTemplateTest extends BaseTest {
 	@Override
 	public void run() {
+		@SuppressWarnings("deprecation")
 		MongoTemplate mongoTemplate = MongoDbUtils.mongoTemplate("dbconfig.properties", "mongodb");
 
 		if (mongoTemplate == null) {

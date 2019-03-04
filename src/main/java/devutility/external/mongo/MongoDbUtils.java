@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -60,8 +61,21 @@ public class MongoDbUtils {
 	 * @param converters: Customer converters.
 	 * @return MongoTemplate
 	 */
-	public static MongoTemplate mongoTemplate(String uri, List<Object> converters) {
+	public static MongoTemplate mongoTemplate(String uri, List<?> converters) {
 		MongoDbFactory mongoDbFactory = mongoDbFactory(uri);
+		MongoConverter mongoConverter = mongoConverter(mongoDbFactory, converters);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
+	 * Create a MongoTemplate object.
+	 * @param uri: MongoDB connection uri.
+	 * @param mongoClientOptions: MongoClientOptions object.
+	 * @param converters: Customer converters.
+	 * @return MongoTemplate
+	 */
+	public static MongoTemplate mongoTemplate(String uri, MongoClientOptions mongoClientOptions, List<?> converters) {
+		MongoDbFactory mongoDbFactory = mongoDbFactory(uri, mongoClientOptions);
 		MongoConverter mongoConverter = mongoConverter(mongoDbFactory, converters);
 		return new MongoTemplate(mongoDbFactory, mongoConverter);
 	}
@@ -71,6 +85,7 @@ public class MongoDbUtils {
 	 * @param dbInstance: DbInstance object.
 	 * @return MongoTemplate
 	 */
+	@Deprecated
 	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
@@ -91,6 +106,7 @@ public class MongoDbUtils {
 	 * @param prefix: Prefix of mongodb config in properties file.
 	 * @return MongoTemplate
 	 */
+	@Deprecated
 	public static MongoTemplate mongoTemplate(String propertiesFile, String prefix) {
 		String key = String.format("%s.%s", prefix, MongoTemplate.class.getName());
 		MongoTemplate mongoTemplate = SingletonFactory.get(key, MongoTemplate.class);
@@ -121,9 +137,21 @@ public class MongoDbUtils {
 
 	/**
 	 * Create a MongoClient object.
+	 * @param uri: MongoDB connection uri.
+	 * @param mongoClientOptions: MongoClientOptions object.
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(String uri, MongoClientOptions mongoClientOptions) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri, MongoClientOptions.builder(mongoClientOptions));
+		return new MongoClient(mongoClientURI);
+	}
+
+	/**
+	 * Create a MongoClient object.
 	 * @param dbInstance: DbInstance object.
 	 * @return MongoClient
 	 */
+	@Deprecated
 	public static MongoClient mongoClient(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
@@ -165,9 +193,21 @@ public class MongoDbUtils {
 
 	/**
 	 * Create a MongoDbFactory object.
+	 * @param uri: MongoDB connection uri.
+	 * @param mongoClientOptions: MongoClientOptions object.
+	 * @return MongoDbFactory
+	 */
+	public static MongoDbFactory mongoDbFactory(String uri, MongoClientOptions mongoClientOptions) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri, MongoClientOptions.builder(mongoClientOptions));
+		return new SimpleMongoDbFactory(mongoClientURI);
+	}
+
+	/**
+	 * Create a MongoDbFactory object.
 	 * @param dbInstance: Database instance.
 	 * @return MongoDbFactory
 	 */
+	@Deprecated
 	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
@@ -182,6 +222,7 @@ public class MongoDbUtils {
 	 * @param dbInstance: DbInstance object.
 	 * @return MongoCredential
 	 */
+	@Deprecated
 	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
 		if (dbInstance == null || dbInstance.getLoginName() == null) {
 			return null;
@@ -195,6 +236,7 @@ public class MongoDbUtils {
 	 * @param dbInstance: Database instance.
 	 * @return ServerAddress
 	 */
+	@Deprecated
 	private static ServerAddress createServerAddress(DbInstance dbInstance) {
 		if (dbInstance == null) {
 			return null;
@@ -218,7 +260,7 @@ public class MongoDbUtils {
 	 * @param converters: Customer converters.
 	 * @return MongoConverter
 	 */
-	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<Object> converters) {
+	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<?> converters) {
 		if (mongoDbFactory == null) {
 			return null;
 		}

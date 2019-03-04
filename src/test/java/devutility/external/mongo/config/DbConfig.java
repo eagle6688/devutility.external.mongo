@@ -17,6 +17,7 @@ public class DbConfig {
 	 */
 	private static class MongoDbHolder {
 		private static DbInstance dbInstance = DbInstanceUtils.getInstance(CONFIG_NAME, "mongodb");
+		@SuppressWarnings("deprecation")
 		public static MongoTemplate mongoTemplate = MongoDbUtils.mongoTemplate(dbInstance);
 	}
 
