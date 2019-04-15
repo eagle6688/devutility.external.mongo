@@ -45,7 +45,7 @@ import devutility.internal.util.CollectionUtils;
 public class MongoDbUtils {
 	/**
 	 * Create a MongoTemplate object.
-	 * @param uri: MongoDB connection uri.
+	 * @param uri MongoDB connection uri.
 	 * @return MongoTemplate
 	 */
 	public static MongoTemplate mongoTemplate(String uri) {
@@ -56,8 +56,8 @@ public class MongoDbUtils {
 
 	/**
 	 * Create a MongoTemplate object.
-	 * @param uri: MongoDB connection uri.
-	 * @param converters: Customer converters.
+	 * @param uri MongoDB connection uri.
+	 * @param converters Customer converters.
 	 * @return MongoTemplate
 	 */
 	public static MongoTemplate mongoTemplate(String uri, List<Object> converters) {
@@ -67,51 +67,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create a MongoTemplate object.
-	 * @param dbInstance: DbInstance object.
-	 * @return MongoTemplate
-	 */
-	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		if (StringUtils.isNotEmpty(dbInstance.getUri())) {
-			return mongoTemplate(dbInstance.getUri());
-		}
-
-		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
-		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
-		return new MongoTemplate(mongoDbFactory, mongoConverter);
-	}
-
-	/**
-	 * Get or create a MongoTemplate instance.
-	 * @param propertiesFile: Properties file.
-	 * @param prefix: Prefix of mongodb config in properties file.
-	 * @return MongoTemplate
-	 */
-	public static MongoTemplate mongoTemplate(String propertiesFile, String prefix) {
-		String key = String.format("%s.%s", prefix, MongoTemplate.class.getName());
-		MongoTemplate mongoTemplate = SingletonFactory.get(key, MongoTemplate.class);
-
-		if (mongoTemplate != null) {
-			return mongoTemplate;
-		}
-
-		synchronized (MongoDbUtils.class) {
-			if (mongoTemplate == null) {
-				DbInstance dbInstance = DbInstanceUtils.getInstance(propertiesFile, prefix);
-				mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
-			}
-		}
-
-		return mongoTemplate;
-	}
-
-	/**
 	 * Create a MongoClient object.
-	 * @param uri: MongoDB connection uri.
+	 * @param uri MongoDB connection uri.
 	 * @return MongoClient
 	 */
 	public static MongoClient mongoClient(String uri) {
@@ -120,42 +77,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create a MongoClient object.
-	 * @param dbInstance: DbInstance object.
-	 * @return MongoClient
-	 */
-	public static MongoClient mongoClient(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		MongoCredential mongoCredential = createMongoCredential(dbInstance);
-		ServerAddress serverAddress = createServerAddress(dbInstance);
-		return mongoClient(serverAddress, mongoCredential);
-	}
-
-	/**
-	 * Create a MongoClient object.
-	 * @param serverAddress: ServerAddress object.
-	 * @param mongoCredential: MongoCredential object.
-	 * @return MongoClient
-	 */
-	@Deprecated
-	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
-		if (serverAddress == null) {
-			return null;
-		}
-
-		if (mongoCredential == null) {
-			return new MongoClient(serverAddress);
-		}
-
-		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
-	}
-
-	/**
 	 * Create a MongoDbFactory object.
-	 * @param uri: MongoDB connection uri.
+	 * @param uri MongoDB connection uri.
 	 * @return MongoDbFactory
 	 */
 	public static MongoDbFactory mongoDbFactory(String uri) {
@@ -164,48 +87,8 @@ public class MongoDbUtils {
 	}
 
 	/**
-	 * Create a MongoDbFactory object.
-	 * @param dbInstance: Database instance.
-	 * @return MongoDbFactory
-	 */
-	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		MongoClient mongoClient = mongoClient(dbInstance);
-		return new SimpleMongoDbFactory(mongoClient, dbInstance.getDatabase());
-	}
-
-	/**
-	 * Create a MongoCredential object.
-	 * @param dbInstance: DbInstance object.
-	 * @return MongoCredential
-	 */
-	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
-		if (dbInstance == null || dbInstance.getLoginName() == null) {
-			return null;
-		}
-
-		return MongoCredential.createCredential(dbInstance.getLoginName(), dbInstance.getDatabase(), dbInstance.getPassword().toCharArray());
-	}
-
-	/**
-	 * Create a ServerAddress object.
-	 * @param dbInstance: Database instance.
-	 * @return ServerAddress
-	 */
-	private static ServerAddress createServerAddress(DbInstance dbInstance) {
-		if (dbInstance == null) {
-			return null;
-		}
-
-		return new ServerAddress(dbInstance.getHost(), dbInstance.getPort());
-	}
-
-	/**
 	 * Create a default MongoConverter object.
-	 * @param mongoDbFactory: MongoDbFactory object.
+	 * @param mongoDbFactory MongoDbFactory object.
 	 * @return MongoConverter
 	 */
 	public static final MongoConverter defaultMongoConverter(MongoDbFactory mongoDbFactory) {
@@ -214,8 +97,8 @@ public class MongoDbUtils {
 
 	/**
 	 * Create a MongoConverter object.
-	 * @param mongoDbFactory: MongoDbFactory object.
-	 * @param converters: Customer converters.
+	 * @param mongoDbFactory MongoDbFactory object.
+	 * @param converters Customer converters.
 	 * @return MongoConverter
 	 */
 	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<Object> converters) {
@@ -239,10 +122,10 @@ public class MongoDbUtils {
 
 	/**
 	 * Create index.
-	 * @param mongoOperations: MongoOperations object.
-	 * @param clazz: Collection entity class.
-	 * @param indexMap: Index map, format: field, Direction
-	 * @param unique: Unique index or not?
+	 * @param mongoOperations MongoOperations object.
+	 * @param clazz Collection entity class.
+	 * @param indexMap Index map, format: field, Direction
+	 * @param unique Unique index or not?
 	 */
 	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, Map<String, Direction> indexMap, boolean unique) {
 		Index index = createIndex(indexMap, unique);
@@ -251,10 +134,10 @@ public class MongoDbUtils {
 
 	/**
 	 * Create index with provided fields.
-	 * @param mongoOperations: MongoOperations object.
-	 * @param clazz: Collection entity class.
-	 * @param field: Field want to create index.
-	 * @param unique: Unique index or not?
+	 * @param mongoOperations MongoOperations object.
+	 * @param clazz Collection entity class.
+	 * @param field Field want to create index.
+	 * @param unique Unique index or not?
 	 */
 	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, String field, boolean unique) {
 		createIndex(mongoOperations, clazz, new HashSet<>(Arrays.asList(field)), unique);
@@ -262,10 +145,10 @@ public class MongoDbUtils {
 
 	/**
 	 * Create index with provided fields.
-	 * @param mongoOperations: MongoOperations object.
-	 * @param clazz: Collection entity class.
-	 * @param fields: Fields want to create index.
-	 * @param unique: Unique index or not?
+	 * @param mongoOperations MongoOperations object.
+	 * @param clazz Collection entity class.
+	 * @param fields Fields want to create index.
+	 * @param unique Unique index or not?
 	 */
 	public static <T> void createIndex(MongoOperations mongoOperations, Class<T> clazz, Set<String> fields, boolean unique) {
 		Map<String, Direction> indexMap = new HashMap<>();
@@ -279,8 +162,8 @@ public class MongoDbUtils {
 
 	/**
 	 * Create index.
-	 * @param indexMap: Index map, format: field, Direction.
-	 * @param unique: Unique index or not?
+	 * @param indexMap Index map, format: field, Direction.
+	 * @param unique Unique index or not?
 	 * @return Index
 	 */
 	private static Index createIndex(Map<String, Direction> indexMap, boolean unique) {
@@ -299,11 +182,11 @@ public class MongoDbUtils {
 
 	/**
 	 * Update
-	 * @param mongoOperations: MongoOperations object.
-	 * @param id: Id value.
-	 * @param setField: Field need update.
-	 * @param setValue: Field value need update.
-	 * @param clazz: Collection entity class.
+	 * @param mongoOperations MongoOperations object.
+	 * @param id Id value.
+	 * @param setField Field need update.
+	 * @param setValue Field value need update.
+	 * @param clazz Collection entity class.
 	 * @return UpdateResult
 	 */
 	public static UpdateResult update(MongoOperations mongoOperations, String id, String setField, Object setValue, Class<?> clazz) {
@@ -312,12 +195,12 @@ public class MongoDbUtils {
 
 	/**
 	 * Update
-	 * @param mongoOperations: MongoOperations object.
-	 * @param keyField: Primary key.
-	 * @param keyValue: Primary key value.
-	 * @param setField: Field need update.
-	 * @param setValue: Field value need update.
-	 * @param clazz: Collection entity class.
+	 * @param mongoOperations MongoOperations object.
+	 * @param keyField Primary key.
+	 * @param keyValue Primary key value.
+	 * @param setField Field need update.
+	 * @param setValue Field value need update.
+	 * @param clazz Collection entity class.
 	 * @return UpdateResult
 	 */
 	public static UpdateResult update(MongoOperations mongoOperations, String keyField, Object keyValue, String setField, Object setValue, Class<?> clazz) {
@@ -332,7 +215,7 @@ public class MongoDbUtils {
 
 	/**
 	 * Is primary key or not?
-	 * @param annotation: Field annotation object
+	 * @param annotation Field annotation object
 	 * @return boolean
 	 */
 	public static boolean isPk(Annotation annotation) {
@@ -341,7 +224,7 @@ public class MongoDbUtils {
 
 	/**
 	 * Is field
-	 * @param annotation: Field annotation object
+	 * @param annotation Field annotation object
 	 * @return boolean
 	 */
 	public static boolean isField(Annotation annotation) {
@@ -350,7 +233,7 @@ public class MongoDbUtils {
 
 	/**
 	 * Get field name
-	 * @param annotation: Field annotation object
+	 * @param annotation Field annotation object
 	 * @return String
 	 */
 	public static String getFieldName(Annotation annotation) {
@@ -365,10 +248,10 @@ public class MongoDbUtils {
 
 	/**
 	 * Transfer entity to Query
-	 * @param entity: Entity object.
-	 * @param entityFields: Entity EntityField list.
+	 * @param entity Entity object.
+	 * @param entityFields Entity EntityField list.
 	 * @return Query
-	 * @throws ReflectiveOperationException
+	 * @throws ReflectiveOperationException From getAnnotations
 	 */
 	public static <T> Query entityToQuery(T entity, List<EntityField> entityFields) throws ReflectiveOperationException {
 		if (entity == null || CollectionUtils.isNullOrEmpty(entityFields)) {
@@ -401,8 +284,8 @@ public class MongoDbUtils {
 
 	/**
 	 * Transfer entity to Update
-	 * @param entity: Entity object
-	 * @param entityFields: Entity EntityField list
+	 * @param entity Entity object
+	 * @param entityFields Entity EntityField list
 	 * @return Update
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -440,11 +323,11 @@ public class MongoDbUtils {
 
 	/**
 	 * Query elements by query, return a distinct list include specified field.
-	 * @param mongoOperations: MongoOperations object.
-	 * @param collection: Collection name.
-	 * @param field: Include field.
-	 * @param query: Query object.
-	 * @param clazz: Class object for type.
+	 * @param mongoOperations MongoOperations object.
+	 * @param collection Collection name.
+	 * @param field Include field.
+	 * @param query Query object.
+	 * @param clazz Class object for type.
 	 * @return {@code List<T>}
 	 */
 	public static <T> List<T> distinct(MongoOperations mongoOperations, String collection, String field, Query query, Class<T> clazz) {
@@ -459,5 +342,128 @@ public class MongoDbUtils {
 		List<T> list = new LinkedList<>();
 		result.iterator().forEachRemaining(list::add);
 		return list;
+	}
+
+	/**
+	 * Create a MongoTemplate object.
+	 * @param dbInstance DbInstance object.
+	 * @return MongoTemplate
+	 */
+	@Deprecated
+	public static MongoTemplate mongoTemplate(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		if (StringUtils.isNotEmpty(dbInstance.getUri())) {
+			return mongoTemplate(dbInstance.getUri());
+		}
+
+		MongoDbFactory mongoDbFactory = mongoDbFactory(dbInstance);
+		MongoConverter mongoConverter = defaultMongoConverter(mongoDbFactory);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
+	 * Get or create a MongoTemplate instance.
+	 * @param propertiesFile Properties file.
+	 * @param prefix Prefix of mongodb config in properties file.
+	 * @return MongoTemplate
+	 */
+	@Deprecated
+	public static MongoTemplate mongoTemplate(String propertiesFile, String prefix) {
+		String key = String.format("%s.%s", prefix, MongoTemplate.class.getName());
+		MongoTemplate mongoTemplate = SingletonFactory.get(key, MongoTemplate.class);
+
+		if (mongoTemplate != null) {
+			return mongoTemplate;
+		}
+
+		synchronized (MongoDbUtils.class) {
+			if (mongoTemplate == null) {
+				DbInstance dbInstance = DbInstanceUtils.getInstance(propertiesFile, prefix);
+				mongoTemplate = SingletonFactory.save(key, mongoTemplate(dbInstance));
+			}
+		}
+
+		return mongoTemplate;
+	}
+
+	/**
+	 * Create a MongoClient object.
+	 * @param dbInstance DbInstance object.
+	 * @return MongoClient
+	 */
+	@Deprecated
+	public static MongoClient mongoClient(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		MongoCredential mongoCredential = createMongoCredential(dbInstance);
+		ServerAddress serverAddress = createServerAddress(dbInstance);
+		return mongoClient(serverAddress, mongoCredential);
+	}
+
+	/**
+	 * Create a MongoClient object.
+	 * @param serverAddress ServerAddress object.
+	 * @param mongoCredential MongoCredential object.
+	 * @return MongoClient
+	 */
+	@Deprecated
+	public static MongoClient mongoClient(ServerAddress serverAddress, MongoCredential mongoCredential) {
+		if (serverAddress == null) {
+			return null;
+		}
+
+		if (mongoCredential == null) {
+			return new MongoClient(serverAddress);
+		}
+
+		return new MongoClient(serverAddress, Arrays.asList(mongoCredential));
+	}
+
+	/**
+	 * Create a MongoDbFactory object.
+	 * @param dbInstance Database instance.
+	 * @return MongoDbFactory
+	 */
+	@Deprecated
+	public static MongoDbFactory mongoDbFactory(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		MongoClient mongoClient = mongoClient(dbInstance);
+		return new SimpleMongoDbFactory(mongoClient, dbInstance.getDatabase());
+	}
+
+	/**
+	 * Create a MongoCredential object.
+	 * @param dbInstance DbInstance object.
+	 * @return MongoCredential
+	 */
+	@Deprecated
+	private static MongoCredential createMongoCredential(DbInstance dbInstance) {
+		if (dbInstance == null || dbInstance.getLoginName() == null) {
+			return null;
+		}
+
+		return MongoCredential.createCredential(dbInstance.getLoginName(), dbInstance.getDatabase(), dbInstance.getPassword().toCharArray());
+	}
+
+	/**
+	 * Create a ServerAddress object.
+	 * @param dbInstance Database instance.
+	 * @return ServerAddress
+	 */
+	@Deprecated
+	private static ServerAddress createServerAddress(DbInstance dbInstance) {
+		if (dbInstance == null) {
+			return null;
+		}
+
+		return new ServerAddress(dbInstance.getHost(), dbInstance.getPort());
 	}
 }

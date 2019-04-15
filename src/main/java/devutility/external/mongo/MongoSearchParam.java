@@ -42,7 +42,7 @@ public abstract class MongoSearchParam {
 	}
 
 	/**
-	 * getQuery
+	 * Get Query object.
 	 * @return Query
 	 */
 	public Query getQuery() {
@@ -65,14 +65,19 @@ public abstract class MongoSearchParam {
 	}
 
 	/**
-	 * clear void
+	 * Clear query.
 	 */
 	public void clear() {
 		query = new Query();
 	}
 
 	/**
-	 * is
+	 * Method for build Query object for sub class.
+	 */
+	protected abstract void buildQuery();
+
+	/**
+	 * Is query.
 	 * @param field Field in mongo
 	 * @param value Search value
 	 */
@@ -85,7 +90,7 @@ public abstract class MongoSearchParam {
 	}
 
 	/**
-	 * in
+	 * In query.
 	 * @param field Field in mongo
 	 * @param values Search values
 	 */
@@ -98,12 +103,7 @@ public abstract class MongoSearchParam {
 	}
 
 	/**
-	 * buildQuery void
-	 */
-	protected abstract void buildQuery();
-
-	/**
-	 * paging
+	 * Paging query.
 	 * @param pageIndex
 	 * @param pageSize void
 	 */
@@ -118,7 +118,7 @@ public abstract class MongoSearchParam {
 	}
 
 	/**
-	 * top
+	 * Top query.
 	 * @param topCount void
 	 */
 	private void top(int topCount) {

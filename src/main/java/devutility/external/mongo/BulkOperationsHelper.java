@@ -26,7 +26,7 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Constructor
-	 * @param mongoOperations: MongoOperations object
+	 * @param mongoOperations MongoOperations object
 	 */
 	public BulkOperationsHelper(MongoOperations mongoOperations) {
 		this.mongoOperations = mongoOperations;
@@ -34,8 +34,8 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Get BulkOperations object
-	 * @param bulkMode: Mode for bulk operation.
-	 * @param clazz: MongoDB collection entity class
+	 * @param bulkMode Mode for bulk operation.
+	 * @param clazz MongoDB collection entity class
 	 * @return BulkOperations
 	 */
 	private BulkOperations bulkOperations(BulkMode bulkMode, Class<?> clazz) {
@@ -44,8 +44,8 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Entity to query and update pair.
-	 * @param entity: Entity object
-	 * @param entityFields: Entity fields
+	 * @param entity Entity object
+	 * @param entityFields Entity fields
 	 * @return {@literal Pair<Query, Update>}
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -84,8 +84,8 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Entities to query and update pairs.
-	 * @param list: Entities.
-	 * @param clazz: Entity class.
+	 * @param list Entities.
+	 * @param clazz Entity class.
 	 * @return {@literal List<Pair<Query,Update>>}
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -97,9 +97,9 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Entities to query and update pairs.
-	 * @param list: Entities.
-	 * @param fieldsForQuery: Fields contains in query.
-	 * @param clazz: Entity class.
+	 * @param list Entities.
+	 * @param fieldsForQuery Fields contains in query.
+	 * @param clazz Entity class.
 	 * @return {@literal List<Pair<Query,Update>>}
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -112,10 +112,10 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Entities to query and update pairs.
-	 * @param list: Entities.
-	 * @param fieldsForQuery: Fields contains in query.
-	 * @param fieldsForUpdate: Fields contains in update.
-	 * @param clazz
+	 * @param list Entities.
+	 * @param fieldsForQuery Fields contains in query.
+	 * @param fieldsForUpdate Fields contains in update.
+	 * @param clazz Class object.
 	 * @return {@code List<Pair<Query,Update>>}
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -129,9 +129,9 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Entities to query and update pairs.
-	 * @param list: Entities.
-	 * @param entityFieldsForQuery: EntityField for query.
-	 * @param entityFieldsForUpdate: EntityField for update.
+	 * @param list Entities.
+	 * @param entityFieldsForQuery EntityField for query.
+	 * @param entityFieldsForUpdate EntityField for update.
 	 * @return {@code List<Pair<Query,Update>>}
 	 * @throws ReflectiveOperationException
 	 */
@@ -149,8 +149,8 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Save list
-	 * @param list: Entities.
-	 * @param clazz: Entity class.
+	 * @param list Entities.
+	 * @param clazz Entity class.
 	 * @return BulkWriteResult
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -164,9 +164,9 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Save list
-	 * @param list: Entities.
-	 * @param fieldsForQuery: Fields can determine an unique entity.
-	 * @param clazz: Entity class.
+	 * @param list Entities.
+	 * @param fieldsForQuery Fields can determine an unique entity.
+	 * @param clazz Entity class.
 	 * @return BulkWriteResult
 	 * @throws IllegalArgumentException
 	 * @throws ReflectiveOperationException
@@ -180,13 +180,13 @@ public class BulkOperationsHelper {
 
 	/**
 	 * Save list.
-	 * @param list: Entities.
-	 * @param fieldsForQuery: Fields can determine an unique entity.
-	 * @param fieldsForUpdate: Fields for update.
-	 * @param clazz: Entity class.
+	 * @param list Entities.
+	 * @param fieldsForQuery Fields can determine an unique entity.
+	 * @param fieldsForUpdate Fields for update.
+	 * @param clazz Entity class.
 	 * @return BulkWriteResult
-	 * @throws IllegalArgumentException
-	 * @throws ReflectiveOperationException
+	 * @throws IllegalArgumentException From toPairs method.
+	 * @throws ReflectiveOperationException From toPairs method.
 	 */
 	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, List<String> fieldsForUpdate, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
 		BulkOperations bulkOperations = bulkOperations(BulkMode.UNORDERED, clazz);
