@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -67,6 +68,19 @@ public class MongoDbUtils {
 	}
 
 	/**
+	 * Create a MongoTemplate object.
+	 * @param uri MongoDB connection uri.
+	 * @param mongoClientOptions MongoClientOptions object.
+	 * @param converters Customer converters.
+	 * @return MongoTemplate
+	 */
+	public static MongoTemplate mongoTemplate(String uri, MongoClientOptions mongoClientOptions, List<?> converters) {
+		MongoDbFactory mongoDbFactory = mongoDbFactory(uri, mongoClientOptions);
+		MongoConverter mongoConverter = mongoConverter(mongoDbFactory, converters);
+		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
 	 * Create a MongoClient object.
 	 * @param uri MongoDB connection uri.
 	 * @return MongoClient
@@ -77,12 +91,34 @@ public class MongoDbUtils {
 	}
 
 	/**
+	 * Create a MongoClient object.
+	 * @param uri MongoDB connection uri.
+	 * @param mongoClientOptions MongoClientOptions object.
+	 * @return MongoClient
+	 */
+	public static MongoClient mongoClient(String uri, MongoClientOptions mongoClientOptions) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri, MongoClientOptions.builder(mongoClientOptions));
+		return new MongoClient(mongoClientURI);
+	}
+
+	/**
 	 * Create a MongoDbFactory object.
 	 * @param uri MongoDB connection uri.
 	 * @return MongoDbFactory
 	 */
 	public static MongoDbFactory mongoDbFactory(String uri) {
 		MongoClientURI mongoClientURI = new MongoClientURI(uri);
+		return new SimpleMongoDbFactory(mongoClientURI);
+	}
+
+	/**
+	 * Create a MongoDbFactory object.
+	 * @param uri MongoDB connection uri.
+	 * @param mongoClientOptions MongoClientOptions object.
+	 * @return MongoDbFactory
+	 */
+	public static MongoDbFactory mongoDbFactory(String uri, MongoClientOptions mongoClientOptions) {
+		MongoClientURI mongoClientURI = new MongoClientURI(uri, MongoClientOptions.builder(mongoClientOptions));
 		return new SimpleMongoDbFactory(mongoClientURI);
 	}
 
@@ -101,7 +137,7 @@ public class MongoDbUtils {
 	 * @param converters Customer converters.
 	 * @return MongoConverter
 	 */
-	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<Object> converters) {
+	public static final MongoConverter mongoConverter(MongoDbFactory mongoDbFactory, List<?> converters) {
 		if (mongoDbFactory == null) {
 			return null;
 		}
