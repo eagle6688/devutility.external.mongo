@@ -8,16 +8,16 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.devutility.test.model.Student;
 import com.mongodb.bulk.BulkWriteResult;
 
 import devutility.external.mongo.BaseTest;
 import devutility.internal.test.TestExecutor;
+import devutility.internal.test.data.model.Student;
 
 public class InsertTest extends BaseTest {
 	@Override
 	public void run() {
-		List<Student> list = Student.list(100);
+		List<Student> list = Student.students(100);
 		BulkOperations bulkOperations = mongoOperations.bulkOps(BulkMode.UNORDERED, "Student");
 
 		for (Student item : list) {
