@@ -2,9 +2,8 @@ package devutility.external.mongo.mongooperations;
 
 import java.util.List;
 
-import com.devutility.test.entity.mongo.Student;
-
 import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.entity.Student;
 import devutility.internal.test.TestExecutor;
 
 public class SaveTest extends BaseTest {

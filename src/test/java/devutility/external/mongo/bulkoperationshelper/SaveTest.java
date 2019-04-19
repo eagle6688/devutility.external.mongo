@@ -3,11 +3,11 @@ package devutility.external.mongo.bulkoperationshelper;
 import java.util.Arrays;
 import java.util.List;
 
-import com.devutility.test.entity.mongo.Student;
 import com.mongodb.bulk.BulkWriteResult;
 
 import devutility.external.mongo.BaseTest;
 import devutility.external.mongo.BulkOperationsHelper;
+import devutility.external.mongo.entity.Student;
 import devutility.internal.test.TestExecutor;
 
 public class SaveTest extends BaseTest {
