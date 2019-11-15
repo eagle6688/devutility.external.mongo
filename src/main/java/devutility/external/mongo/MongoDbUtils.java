@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
@@ -107,8 +108,7 @@ public class MongoDbUtils {
 	 * @return MongoDbFactory
 	 */
 	public static MongoDbFactory mongoDbFactory(String uri) {
-		MongoClientURI mongoClientURI = new MongoClientURI(uri);
-		return new SimpleMongoDbFactory(mongoClientURI);
+		return new SimpleMongoClientDbFactory(uri);
 	}
 
 	/**
