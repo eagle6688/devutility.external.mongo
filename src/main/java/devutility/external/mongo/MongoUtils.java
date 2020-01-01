@@ -1,10 +1,14 @@
 package devutility.external.mongo;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.query.Update;
 
+import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.StringUtils;
+import devutility.internal.lang.models.EntityField;
 
 /**
  * 
@@ -37,5 +41,30 @@ public class MongoUtils {
 		}
 
 		return field.getName();
+	}
+
+	public static Update objectToUpdate(Object entity, List<EntityField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
+		if (entityFields == null) {
+			entityFields = ClassUtils.getEntityFields(entity.getClass());
+		}
+
+		Update update = new Update();
+
+		for (EntityField entityField : entityFields) {
+			Object fieldValue = entityField.getValue(entity);
+
+			if (!containNullValue && fieldValue == null) {
+				continue;
+			}
+
+			String fieldName = getFieldName(entityField.getField());
+			update.set(fieldName, fieldValue);
+		}
+
+		return update;
+	}
+
+	public static Update objectToUpdate(Object entity, List<EntityField> entityFields) throws ReflectiveOperationException {
+		return objectToUpdate(entity, entityFields, true);
 	}
 }
