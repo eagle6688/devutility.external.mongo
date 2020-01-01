@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import devutility.internal.util.RandomUtils;
+
 @Document(collection = "Student")
 public class Student {
 	@Id
@@ -14,6 +16,11 @@ public class Student {
 
 	@Field("Name")
 	private String name;
+
+	@Field
+	private int gender;
+
+	private int age;
 
 	public int getId() {
 		return id;
@@ -31,6 +38,22 @@ public class Student {
 		this.name = name;
 	}
 
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	public static List<Student> list(int count) {
 		List<Student> list = new ArrayList<>(count);
 
@@ -40,6 +63,7 @@ public class Student {
 			Student student = new Student();
 			student.setId(number);
 			student.setName(String.format("Student_%d", number));
+			student.setAge(RandomUtils.getNumber(15, 21));
 			list.add(student);
 		}
 
