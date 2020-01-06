@@ -94,7 +94,7 @@ public class MongoUtils {
 	 * @param containNullValue Whether contain field with null value in entity? The result does not contain fileds with null
 	 *            value if set containNullValue=false.
 	 * @return Query
-	 * @throws ReflectiveOperationException
+	 * @throws ReflectiveOperationException from getValue method.
 	 */
 	public static Query objectToQuery(Object entity, List<EntityField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
 		if (entityFields == null) {
@@ -112,7 +112,7 @@ public class MongoUtils {
 
 			String fieldName = getFieldName(entityField.getField());
 
-			if (Collection.class.isAssignableFrom(fieldValue.getClass()) || fieldValue.getClass().isArray()) {
+			if (fieldValue != null && (Collection.class.isAssignableFrom(fieldValue.getClass()) || fieldValue.getClass().isArray())) {
 				query.addCriteria(Criteria.where(fieldName).in(fieldValue));
 			} else {
 				query.addCriteria(Criteria.where(fieldName).is(fieldValue));
@@ -127,9 +127,21 @@ public class MongoUtils {
 	 * @param entity MongoDB entity.
 	 * @param entityFields EntityField objects.
 	 * @return Query
-	 * @throws ReflectiveOperationException
+	 * @throws ReflectiveOperationException from getValue method.
 	 */
 	public static Query objectToQuery(Object entity, List<EntityField> entityFields) throws ReflectiveOperationException {
+		return objectToQuery(entity, entityFields, true);
+	}
+
+	/**
+	 * Convert entity to Query object.
+	 * @param entity MongoDB entity.
+	 * @param fields Fields need in Query object.
+	 * @return Query
+	 * @throws ReflectiveOperationException from getValue method.
+	 */
+	public static Query objectToQueryByFields(Object entity, List<String> fields) throws ReflectiveOperationException {
+		List<EntityField> entityFields = ClassUtils.getIncludedEntityFields(fields, entity.getClass());
 		return objectToQuery(entity, entityFields, true);
 	}
 }
