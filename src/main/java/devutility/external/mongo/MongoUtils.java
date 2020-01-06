@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -143,5 +144,22 @@ public class MongoUtils {
 	public static Query objectToQueryByFields(Object entity, List<String> fields) throws ReflectiveOperationException {
 		List<EntityField> entityFields = ClassUtils.getIncludedEntityFields(fields, entity.getClass());
 		return objectToQuery(entity, entityFields, true);
+	}
+
+	/**
+	 * Return a distinct list from MongoDB with provided Query object.
+	 * @param mongoOperations MongoOperations object.
+	 * @param query Query object.
+	 * @param field Query field name.
+	 * @param entityClass Entity Class object.
+	 * @param resultClass Result Class object.
+	 * @return {@code List<R>}
+	 */
+	public static <E, R> List<R> distinct(MongoOperations mongoOperations, Query query, String field, Class<E> entityClass, Class<R> resultClass) {
+		if (!"_id".equals(field)) {
+			query.fields().exclude("_id").include(field);
+		}
+
+		return mongoOperations.findDistinct(query, field, entityClass, resultClass);
 	}
 }
