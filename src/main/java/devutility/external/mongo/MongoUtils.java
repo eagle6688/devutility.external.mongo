@@ -24,10 +24,6 @@ public class MongoUtils {
 	 * @return String
 	 */
 	public static String getFieldName(Field field) {
-		if (field.getAnnotation(Id.class) != null) {
-			return "_id";
-		}
-
 		org.springframework.data.mongodb.core.mapping.Field aField = field.getAnnotation(org.springframework.data.mongodb.core.mapping.Field.class);
 
 		if (aField != null) {
@@ -40,9 +36,22 @@ public class MongoUtils {
 			}
 		}
 
+		if (field.getAnnotation(Id.class) != null) {
+			return "_id";
+		}
+
 		return field.getName();
 	}
 
+	/**
+	 * Convert entity to Update object.
+	 * @param entity MongoDB entity.
+	 * @param entityFields EntityField objects.
+	 * @param containNullValue Whether contain field with null value in entity? The result does not contain fileds with null
+	 *            value if set containNullValue=false.
+	 * @return Update
+	 * @throws ReflectiveOperationException from getValue method.
+	 */
 	public static Update objectToUpdate(Object entity, List<EntityField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
 		if (entityFields == null) {
 			entityFields = ClassUtils.getEntityFields(entity.getClass());
@@ -64,6 +73,13 @@ public class MongoUtils {
 		return update;
 	}
 
+	/**
+	 * Convert entity to Update object.
+	 * @param entity MongoDB entity.
+	 * @param entityFields EntityField objects.
+	 * @return Update
+	 * @throws ReflectiveOperationException from getValue method.
+	 */
 	public static Update objectToUpdate(Object entity, List<EntityField> entityFields) throws ReflectiveOperationException {
 		return objectToUpdate(entity, entityFields, true);
 	}
