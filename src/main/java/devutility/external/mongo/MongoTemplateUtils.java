@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 
+import com.mongodb.MongoClientSettings;
+
 /**
  * 
  * MongoTemplateUtils
@@ -36,5 +38,17 @@ public class MongoTemplateUtils {
 		MongoDbFactory mongoDbFactory = new SimpleMongoClientDbFactory(uri);
 		MongoConverter mongoConverter = MongoConverterUtils.mongoConverter(mongoDbFactory, converters);
 		return new MongoTemplate(mongoDbFactory, mongoConverter);
+	}
+
+	/**
+	 * Create a MongoTemplate object.
+	 * @param uri MongoDB connection uri.
+	 * @param mongoClientSettings MongoClientSettings object.
+	 * @param converters Customer converters.
+	 * @return MongoTemplate
+	 */
+	public static MongoTemplate mongoTemplate(String uri, MongoClientSettings mongoClientSettings, List<?> converters) {
+		MongoClientSettings.Builder builder = MongoClientSettings.builder();
+		return null;
 	}
 }
