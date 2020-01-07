@@ -44,6 +44,7 @@ import devutility.internal.lang.models.EntityField;
 import devutility.internal.models.DbInstance;
 import devutility.internal.util.CollectionUtils;
 
+@Deprecated
 public class MongoDbUtils {
 	/**
 	 * Create a MongoTemplate object.

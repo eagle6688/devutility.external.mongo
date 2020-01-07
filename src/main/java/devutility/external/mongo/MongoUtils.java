@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,12 +17,14 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.util.Pair;
 
 import com.mongodb.client.result.UpdateResult;
 
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.StringUtils;
 import devutility.internal.lang.models.EntityField;
+import devutility.internal.util.CollectionUtils;
 
 /**
  * 
@@ -153,6 +156,49 @@ public class MongoUtils {
 	public static Query objectToQueryByFields(Object entity, List<String> fields) throws ReflectiveOperationException {
 		List<EntityField> entityFields = ClassUtils.getIncludedEntityFields(fields, entity.getClass());
 		return objectToQuery(entity, entityFields, true);
+	}
+
+	/**
+	 * Convert entity to Pair<Query, Update> object.
+	 * @param entity MongoDB entity.
+	 * @param queryEntityFields EntityField objects for query.
+	 * @param updateEntityFields EntityField objects for update.
+	 * @return {@code Pair<Query,Update>}
+	 * @throws ReflectiveOperationException from objectToQuery or objectToUpdate.
+	 */
+	public static Pair<Query, Update> objectToPair(Object entity, List<EntityField> queryEntityFields, List<EntityField> updateEntityFields) throws ReflectiveOperationException {
+		Query query = objectToQuery(entity, queryEntityFields);
+		Update update = objectToUpdate(entity, updateEntityFields);
+		return Pair.of(query, update);
+	}
+
+	/**
+	 * Convert entity to Pair<Query, Update> object.
+	 * @param entities MongoDB entities.
+	 * @param queryEntityFields EntityField objects for query.
+	 * @param updateEntityFields EntityField objects for update.
+	 * @return {@code List<Pair<Query,Update>>}
+	 * @throws ReflectiveOperationException from objectToPair.
+	 */
+	public static List<Pair<Query, Update>> objectsToPairs(Collection<?> entities, List<EntityField> queryEntityFields, List<EntityField> updateEntityFields) throws ReflectiveOperationException {
+		List<Pair<Query, Update>> list = new LinkedList<>();
+
+		for (Object entity : entities) {
+			list.add(objectToPair(entity, queryEntityFields, updateEntityFields));
+		}
+
+		return list;
+	}
+
+	public static List<Pair<Query, Update>> objectsToPairs(Collection<?> entities, List<String> queryFields) throws ReflectiveOperationException {
+		if (CollectionUtils.isNullOrEmpty(entities)) {
+			return new LinkedList<>();
+		}
+
+		Object firstElement = entities.iterator().next();
+		List<EntityField> queryEntityFields = ClassUtils.getIncludedEntityFields(queryFields, firstElement.getClass());
+		List<EntityField> updateEntityFields = ClassUtils.getEntityFields(firstElement.getClass());
+		return objectsToPairs(entities, queryEntityFields, updateEntityFields);
 	}
 
 	/**
