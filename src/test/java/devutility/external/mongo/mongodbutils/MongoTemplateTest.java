@@ -2,7 +2,7 @@ package devutility.external.mongo.mongodbutils;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import devutility.external.mongo.MongoDbUtils;
+import devutility.external.mongo.utils.MongoDbUtils;
 import devutility.internal.test.BaseTest;
 import devutility.internal.test.TestExecutor;
 

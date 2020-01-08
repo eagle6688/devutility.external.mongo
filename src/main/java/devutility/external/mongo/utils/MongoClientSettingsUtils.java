@@ -1,4 +1,4 @@
-package devutility.external.mongo;
+package devutility.external.mongo.utils;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

@@ -1,4 +1,4 @@
-package devutility.external.mongo.mongoutils;
+package devutility.external.mongo.utils.query;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.query.Query;
 
 import devutility.external.mongo.BaseTest;
-import devutility.external.mongo.MongoUtils;
+import devutility.external.mongo.utils.QueryUtils;
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.test.TestExecutor;
@@ -20,13 +20,13 @@ public class ObjectToQueryTest extends BaseTest {
 		model.setName("Student-1");
 
 		try {
-			Query query = MongoUtils.objectToQuery(model, null);
+			Query query = QueryUtils.objectToQuery(model, null);
 			println(query.toString());
 
-			query = MongoUtils.objectToQuery(model, entityFields, false);
+			query = QueryUtils.objectToQuery(model, entityFields, false);
 			println(query.toString());
 
-			query = MongoUtils.objectToQueryByFields(model, Arrays.asList("name"));
+			query = QueryUtils.objectToQueryByFields(model, Arrays.asList("name"));
 			println(query.toString());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

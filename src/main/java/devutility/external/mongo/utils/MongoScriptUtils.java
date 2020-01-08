@@ -1,4 +1,4 @@
-package devutility.external.mongo;
+package devutility.external.mongo.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

@@ -6,8 +6,8 @@ import java.util.List;
 import com.mongodb.bulk.BulkWriteResult;
 
 import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.MongoBulkHelper;
 import devutility.external.mongo.entity.Student;
-import devutility.external.mongo.helper.MongoBulkHelper;
 import devutility.internal.test.TestExecutor;
 
 public class SaveTest extends BaseTest {

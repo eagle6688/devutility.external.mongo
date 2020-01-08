@@ -1,4 +1,4 @@
-package devutility.external.mongo;
+package devutility.external.mongo.utils;
 
 import java.util.List;
 

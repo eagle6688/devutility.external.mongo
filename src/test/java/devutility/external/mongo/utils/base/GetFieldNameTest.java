@@ -1,10 +1,10 @@
-package devutility.external.mongo.mongoutils;
+package devutility.external.mongo.utils.base;
 
 import java.util.List;
 
 import devutility.external.mongo.BaseTest;
-import devutility.external.mongo.MongoUtils;
 import devutility.external.mongo.entity.Student;
+import devutility.external.mongo.utils.BaseMongoUtils;
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.test.TestExecutor;
@@ -15,7 +15,7 @@ public class GetFieldNameTest extends BaseTest {
 		List<EntityField> entityFields = ClassUtils.getEntityFields(Student.class);
 
 		for (EntityField entityField : entityFields) {
-			println(MongoUtils.getFieldName(entityField.getField()));
+			println(BaseMongoUtils.getFieldName(entityField.getField()));
 		}
 	}
 
