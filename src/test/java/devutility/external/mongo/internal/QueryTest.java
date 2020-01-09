@@ -6,10 +6,10 @@ import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.BaseTestForMongo;
 import devutility.internal.test.TestExecutor;
 
-public class QueryTest extends BaseTest {
+public class QueryTest extends BaseTestForMongo {
 	@Override
 	public void run() {
 		Criteria criteria = new Criteria();

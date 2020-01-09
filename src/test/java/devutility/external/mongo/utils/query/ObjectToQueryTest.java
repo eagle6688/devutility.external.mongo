@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.query.Query;
 
-import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.BaseTestForMongo;
 import devutility.external.mongo.utils.QueryUtils;
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.test.TestExecutor;
 import devutility.internal.test.data.model.Student;
 
-public class ObjectToQueryTest extends BaseTest {
+public class ObjectToQueryTest extends BaseTestForMongo {
 	@Override
 	public void run() {
 		List<EntityField> entityFields = ClassUtils.getEntityFields(Student.class);

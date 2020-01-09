@@ -1,4 +1,4 @@
-package devutility.external.mongo.bulk;
+package devutility.external.mongo.internal.bulk;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mongodb.bulk.BulkWriteResult;
 
-import devutility.external.mongo.BaseTest;
+import devutility.external.mongo.BaseTestForMongo;
 import devutility.internal.test.TestExecutor;
 import devutility.internal.test.data.model.Student;
 
-public class InsertTest extends BaseTest {
+public class UpsertTest extends BaseTestForMongo {
 	@Override
 	public void run() {
 		List<Student> list = Student.students(100);
@@ -43,6 +43,6 @@ public class InsertTest extends BaseTest {
 	}
 
 	public static void main(String[] args) {
-		TestExecutor.run(InsertTest.class);
+		TestExecutor.run(UpsertTest.class);
 	}
 }

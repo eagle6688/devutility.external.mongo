@@ -45,6 +45,15 @@ public class MongoBulkHelper extends BaseMongoHelper {
 		this(mongoOperations, BulkMode.UNORDERED);
 	}
 
+	/**
+	 * Use provided queryFields to query each entity, for entities exist in Mongo, this method would update the provided
+	 * updateFields with entity value; for entities not exist in Mongo, this method would insert the new entity.
+	 * @param entities Objects need save into Mongo.
+	 * @param queryFields Fields for query.
+	 * @param updateFields Fields for update.
+	 * @return BulkWriteResult
+	 * @throws ReflectiveOperationException from objectsToPairs.
+	 */
 	public BulkWriteResult upsert(List<?> entities, String[] queryFields, String[] updateFields) throws ReflectiveOperationException {
 		Class<?> clazz = GenericTypeUtils.getGenericClass(entities);
 
@@ -58,10 +67,26 @@ public class MongoBulkHelper extends BaseMongoHelper {
 		return bulkOperations.execute();
 	}
 
+	/**
+	 * Use provided queryFields to query each entity, for entities exist in Mongo, this method would update the provided
+	 * updateFields with entity value; for entities not exist in Mongo, this method would insert the new entity.
+	 * @param entities Objects need save into Mongo.
+	 * @param queryFields Fields for query.
+	 * @return BulkWriteResult
+	 * @throws ReflectiveOperationException from upsert method.
+	 */
 	public BulkWriteResult upsert(List<?> entities, String[] queryFields) throws ReflectiveOperationException {
 		return upsert(entities, queryFields, null);
 	}
 
+	/**
+	 * Use provided queryFields to query each entity and update the provided updateFields with entity value.
+	 * @param entities Objects need save into Mongo.
+	 * @param queryFields Fields for query.
+	 * @param updateFields Fields for update.
+	 * @return BulkWriteResult
+	 * @throws ReflectiveOperationException from objectsToPairs method.
+	 */
 	public BulkWriteResult update(List<?> entities, String[] queryFields, String[] updateFields) throws ReflectiveOperationException {
 		Class<?> clazz = GenericTypeUtils.getGenericClass(entities);
 
@@ -75,66 +100,14 @@ public class MongoBulkHelper extends BaseMongoHelper {
 		return bulkOperations.execute();
 	}
 
+	/**
+	 * Use provided queryFields to query each entity and update the provided updateFields with entity value.
+	 * @param entities Objects need save into Mongo.
+	 * @param queryFields Fields for query.
+	 * @return BulkWriteResult
+	 * @throws ReflectiveOperationException from objectsToPairs method.
+	 */
 	public BulkWriteResult update(List<?> entities, String[] queryFields) throws ReflectiveOperationException {
 		return update(entities, queryFields, null);
-	}
-
-	public BulkWriteResult save(List<?> entities, String[] queryFields, String[] updateFields) {
-		Class<?> clazz = GenericTypeUtils.getGenericClass(entities);
-
-		if (clazz == null) {
-			return null;
-		}
-
-		BulkOperations bulkOperations = mongoOperations.bulkOps(bulkMode, clazz);
-		return null;
-	}
-
-	/**
-	 * Save list
-	 * @param list Entities.
-	 * @param clazz Entity class.
-	 * @return BulkWriteResult
-	 * @throws IllegalArgumentException
-	 * @throws ReflectiveOperationException
-	 */
-	public <T> BulkWriteResult save(List<T> list, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		BulkOperations bulkOperations = mongoOperations.bulkOps(BulkMode.UNORDERED, clazz);
-		//		List<Pair<Query, Update>> pairs = toPairs(list, clazz);
-		//		bulkOperations.upsert(pairs);
-		return bulkOperations.execute();
-	}
-
-	/**
-	 * Save list
-	 * @param list Entities.
-	 * @param fieldsForQuery Fields can determine an unique entity.
-	 * @param clazz Entity class.
-	 * @return BulkWriteResult
-	 * @throws IllegalArgumentException
-	 * @throws ReflectiveOperationException
-	 */
-	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		BulkOperations bulkOperations = mongoOperations.bulkOps(BulkMode.UNORDERED, clazz);
-		//		List<Pair<Query, Update>> pairs = toPairs(list, fieldsForQuery, clazz);
-		//		bulkOperations.upsert(pairs);
-		return bulkOperations.execute();
-	}
-
-	/**
-	 * Save list.
-	 * @param list Entities.
-	 * @param fieldsForQuery Fields can determine an unique entity.
-	 * @param fieldsForUpdate Fields for update.
-	 * @param clazz Entity class.
-	 * @return BulkWriteResult
-	 * @throws IllegalArgumentException From toPairs method.
-	 * @throws ReflectiveOperationException From toPairs method.
-	 */
-	public <T> BulkWriteResult save(List<T> list, List<String> fieldsForQuery, List<String> fieldsForUpdate, Class<T> clazz) throws IllegalArgumentException, ReflectiveOperationException {
-		BulkOperations bulkOperations = mongoOperations.bulkOps(BulkMode.UNORDERED, clazz);
-		//		List<Pair<Query, Update>> pairs = toPairs(list, fieldsForQuery, fieldsForUpdate, clazz);
-		//		bulkOperations.upsert(pairs);
-		return bulkOperations.execute();
 	}
 }
