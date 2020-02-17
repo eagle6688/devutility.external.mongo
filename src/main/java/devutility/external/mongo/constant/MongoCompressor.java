@@ -1,4 +1,4 @@
-package devutility.external.mongo.com;
+package devutility.external.mongo.constant;
 
 /**
  * 
