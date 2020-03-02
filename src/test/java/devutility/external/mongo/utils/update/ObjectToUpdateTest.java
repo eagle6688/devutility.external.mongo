@@ -9,7 +9,7 @@ import devutility.external.mongo.utils.UpdateUtils;
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.models.EntityField;
 import devutility.internal.test.TestExecutor;
-import devutility.internal.test.data.model.Student;
+import devutility.test.model.Student;
 
 public class ObjectToUpdateTest extends BaseTestForMongo {
 	@Override

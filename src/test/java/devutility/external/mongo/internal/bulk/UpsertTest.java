@@ -12,7 +12,7 @@ import com.mongodb.bulk.BulkWriteResult;
 
 import devutility.external.mongo.BaseTestForMongo;
 import devutility.internal.test.TestExecutor;
-import devutility.internal.test.data.model.Student;
+import devutility.test.model.Student;
 
 public class UpsertTest extends BaseTestForMongo {
 	@Override
