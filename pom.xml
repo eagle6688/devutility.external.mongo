@@ -12,6 +12,15 @@
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Some utilities for Spring Data Mongodb.</description>
 
+	<!-- scm -->
+	<scm>
+		<connection>scm:git:https://github.com/eagle6688/devutility.external.mongo.git</connection>
+		<developerConnection>scm:git:https://github.com/eagle6688/devutility.external.mongo.git</developerConnection>
+		<url>https://github.com/eagle6688/devutility.external.mongo</url>
+		<tag>v${project.version}</tag>
+	</scm>
+	<!-- scm end -->
+
 	<!-- dependencies -->
 	<dependencies>
 		<dependency>
