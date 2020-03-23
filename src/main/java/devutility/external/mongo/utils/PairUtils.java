@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.util.Pair;
 
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.lang.models.EntityField;
 import devutility.internal.lang.reflect.GenericTypeUtils;
+import devutility.internal.model.EntityField;
 import devutility.internal.util.CollectionUtils;
 
 /**

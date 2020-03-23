@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.query.Update;
 
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.lang.models.EntityField;
+import devutility.internal.model.EntityField;
 
 /**
  * 

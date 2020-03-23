@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.lang.models.EntityField;
+import devutility.internal.model.EntityField;
 
 /**
  * 

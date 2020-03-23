@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import devutility.external.mongo.BaseTestForMongo;
 import devutility.external.mongo.utils.QueryUtils;
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.lang.models.EntityField;
+import devutility.internal.model.EntityField;
 import devutility.internal.test.TestExecutor;
 import devutility.test.model.Student;
 
