@@ -40,8 +40,14 @@ public class MongoConverterUtils {
 			return null;
 		}
 
+		List<?> _converters = converters;
+
+		if (converters == null) {
+			_converters = Collections.emptyList();
+		}
+
 		DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDbFactory);
-		MongoCustomConversions conversions = new MongoCustomConversions(converters);
+		MongoCustomConversions conversions = new MongoCustomConversions(_converters);
 
 		MongoMappingContext mappingContext = new MongoMappingContext();
 		mappingContext.setSimpleTypeHolder(conversions.getSimpleTypeHolder());
