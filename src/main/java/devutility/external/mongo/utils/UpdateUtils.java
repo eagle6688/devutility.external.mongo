@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.query.Update;
 
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.model.EntityField;
+import devutility.internal.model.ObjectField;
 
 /**
  * 
@@ -24,14 +24,14 @@ public class UpdateUtils extends BaseMongoUtils {
 	 * @return Update
 	 * @throws ReflectiveOperationException from getValue method.
 	 */
-	public static Update objectToUpdate(Object entity, List<EntityField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
+	public static Update objectToUpdate(Object entity, List<ObjectField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
 		if (entityFields == null) {
 			entityFields = ClassUtils.getEntityFields(entity.getClass());
 		}
 
 		Update update = new Update();
 
-		for (EntityField entityField : entityFields) {
+		for (ObjectField entityField : entityFields) {
 			Object fieldValue = entityField.getValue(entity);
 
 			if (!containNullValue && fieldValue == null) {
@@ -52,7 +52,7 @@ public class UpdateUtils extends BaseMongoUtils {
 	 * @return Update
 	 * @throws ReflectiveOperationException from getValue method.
 	 */
-	public static Update objectToUpdate(Object entity, List<EntityField> entityFields) throws ReflectiveOperationException {
+	public static Update objectToUpdate(Object entity, List<ObjectField> entityFields) throws ReflectiveOperationException {
 		return objectToUpdate(entity, entityFields, true);
 	}
 }

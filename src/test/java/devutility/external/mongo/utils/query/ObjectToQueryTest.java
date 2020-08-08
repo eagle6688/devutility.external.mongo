@@ -8,14 +8,14 @@ import org.springframework.data.mongodb.core.query.Query;
 import devutility.external.mongo.BaseTestForMongo;
 import devutility.external.mongo.utils.QueryUtils;
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.model.EntityField;
+import devutility.internal.model.ObjectField;
 import devutility.internal.test.TestExecutor;
 import devutility.test.model.Student;
 
 public class ObjectToQueryTest extends BaseTestForMongo {
 	@Override
 	public void run() {
-		List<EntityField> entityFields = ClassUtils.getEntityFields(Student.class);
+		List<ObjectField> entityFields = ClassUtils.getEntityFields(Student.class);
 		Student model = new Student();
 		model.setName("Student-1");
 

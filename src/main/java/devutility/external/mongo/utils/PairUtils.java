@@ -14,7 +14,7 @@ import org.springframework.data.util.Pair;
 
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.reflect.GenericTypeUtils;
-import devutility.internal.model.EntityField;
+import devutility.internal.model.ObjectField;
 import devutility.internal.util.CollectionUtils;
 
 /**
@@ -33,7 +33,7 @@ public class PairUtils {
 	 * @return {@code Pair<Query,Update>}
 	 * @throws ReflectiveOperationException from objectToQuery or objectToUpdate.
 	 */
-	public static Pair<Query, Update> objectToPair(Object entity, List<EntityField> queryEntityFields, List<EntityField> updateEntityFields) throws ReflectiveOperationException {
+	public static Pair<Query, Update> objectToPair(Object entity, List<ObjectField> queryEntityFields, List<ObjectField> updateEntityFields) throws ReflectiveOperationException {
 		Query query = QueryUtils.objectToQuery(entity, queryEntityFields);
 		Update update = UpdateUtils.objectToUpdate(entity, updateEntityFields);
 		return Pair.of(query, update);
@@ -47,7 +47,7 @@ public class PairUtils {
 	 * @return {@code List<Pair<Query,Update>>}
 	 * @throws ReflectiveOperationException from objectToPair.
 	 */
-	public static List<Pair<Query, Update>> objectsToPairs(Collection<?> entities, List<EntityField> queryEntityFields, List<EntityField> updateEntityFields) throws ReflectiveOperationException {
+	public static List<Pair<Query, Update>> objectsToPairs(Collection<?> entities, List<ObjectField> queryEntityFields, List<ObjectField> updateEntityFields) throws ReflectiveOperationException {
 		List<Pair<Query, Update>> list = new LinkedList<>();
 
 		for (Object entity : entities) {
@@ -71,8 +71,8 @@ public class PairUtils {
 		}
 
 		Class<?> genericClass = GenericTypeUtils.getGenericClass(entities);
-		List<EntityField> queryEntityFields = ClassUtils.getIncludedEntityFields(queryFields, genericClass);
-		List<EntityField> updateEntityFields = null;
+		List<ObjectField> queryEntityFields = ClassUtils.getIncludedEntityFields(queryFields, genericClass);
+		List<ObjectField> updateEntityFields = null;
 
 		if (updateFields == null || updateFields.length == 0) {
 			updateEntityFields = ClassUtils.getEntityFields(genericClass);
@@ -96,8 +96,8 @@ public class PairUtils {
 		}
 
 		Class<?> genericClass = GenericTypeUtils.getGenericClass(entities);
-		List<EntityField> queryEntityFields = ClassUtils.getIncludedEntityFields(queryFields, genericClass);
-		List<EntityField> updateEntityFields = ClassUtils.getEntityFields(genericClass);
+		List<ObjectField> queryEntityFields = ClassUtils.getIncludedEntityFields(queryFields, genericClass);
+		List<ObjectField> updateEntityFields = ClassUtils.getEntityFields(genericClass);
 		return objectsToPairs(entities, queryEntityFields, updateEntityFields);
 	}
 

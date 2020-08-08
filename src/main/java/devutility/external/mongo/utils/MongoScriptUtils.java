@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import devutility.internal.lang.ClassUtils;
 import devutility.internal.lang.StringUtils;
-import devutility.internal.model.EntityField;
+import devutility.internal.model.ObjectField;
 
 /**
  * 
@@ -62,14 +62,14 @@ public class MongoScriptUtils {
 	 * @throws IllegalArgumentException from invoke method.
 	 * @throws InvocationTargetException from invoke method.
 	 */
-	public static void appendSaveScript(StringBuffer stringBuffer, String collectionName, List<EntityField> entityFields, Object entity) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static void appendSaveScript(StringBuffer stringBuffer, String collectionName, List<ObjectField> entityFields, Object entity) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (StringUtils.isNullOrEmpty(collectionName)) {
 			throw new IllegalArgumentException("Illegal Document object.");
 		}
 
 		StringBuffer buffer = new StringBuffer();
 
-		for (EntityField entityField : entityFields) {
+		for (ObjectField entityField : entityFields) {
 			Field field = entityField.getField();
 			Method getter = entityField.getGetter();
 			Object value = getter.invoke(entity);
@@ -114,9 +114,9 @@ public class MongoScriptUtils {
 			throw new IllegalArgumentException("Illegal Document object.");
 		}
 
-		List<EntityField> entityFields = ClassUtils.getEntityFields(entity.getClass());
+		List<ObjectField> entityFields = ClassUtils.getEntityFields(entity.getClass());
 
-		for (EntityField entityField : entityFields) {
+		for (ObjectField entityField : entityFields) {
 			Field field = entityField.getField();
 			Method getter = entityField.getGetter();
 			Object value = getter.invoke(entity);

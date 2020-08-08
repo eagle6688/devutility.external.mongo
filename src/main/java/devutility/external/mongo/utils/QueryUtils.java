@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import devutility.internal.lang.ClassUtils;
-import devutility.internal.model.EntityField;
+import devutility.internal.model.ObjectField;
 
 /**
  * 
@@ -26,14 +26,14 @@ public class QueryUtils extends BaseMongoUtils {
 	 * @return Query
 	 * @throws ReflectiveOperationException from getValue method.
 	 */
-	public static Query objectToQuery(Object entity, List<EntityField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
+	public static Query objectToQuery(Object entity, List<ObjectField> entityFields, boolean containNullValue) throws ReflectiveOperationException {
 		if (entityFields == null) {
 			entityFields = ClassUtils.getEntityFields(entity.getClass());
 		}
 
 		Query query = new Query();
 
-		for (EntityField entityField : entityFields) {
+		for (ObjectField entityField : entityFields) {
 			Object fieldValue = entityField.getValue(entity);
 
 			if (!containNullValue && fieldValue == null) {
@@ -59,7 +59,7 @@ public class QueryUtils extends BaseMongoUtils {
 	 * @return Query
 	 * @throws ReflectiveOperationException from getValue method.
 	 */
-	public static Query objectToQuery(Object entity, List<EntityField> entityFields) throws ReflectiveOperationException {
+	public static Query objectToQuery(Object entity, List<ObjectField> entityFields) throws ReflectiveOperationException {
 		return objectToQuery(entity, entityFields, true);
 	}
 
@@ -71,7 +71,7 @@ public class QueryUtils extends BaseMongoUtils {
 	 * @throws ReflectiveOperationException from getValue method.
 	 */
 	public static Query objectToQueryByFields(Object entity, Collection<String> fields) throws ReflectiveOperationException {
-		List<EntityField> entityFields = ClassUtils.getIncludedEntityFields(fields, entity.getClass());
+		List<ObjectField> entityFields = ClassUtils.getIncludedEntityFields(fields, entity.getClass());
 		return objectToQuery(entity, entityFields, true);
 	}
 }
